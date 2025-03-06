@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ApiClient } from "@/services/ApiClient";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
+import ErrorMessage from "@/components/ErrorMessage";
 
 type Issue = z.infer<typeof createIssueSchema>;
 
@@ -45,24 +46,14 @@ function CreateIssue() {
             placeholder="hello"
           />
         </TextField.Root>
-        <Callout.Root>
-          {errors.title && (
-            <Callout.Text color="red">{errors.title.message}</Callout.Text>
-          )}
-        </Callout.Root>
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name="description"
           control={control}
           rules={{ required: true }}
           render={({ field }) => <MarkdownEditor height={"150px"} {...field} />}
         />
-        <Callout.Root>
-          {errors.description && (
-            <Callout.Text color="red">
-              {errors.description.message}
-            </Callout.Text>
-          )}
-        </Callout.Root>
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button disabled={!isValid} type="submit">
           Create
         </Button>
