@@ -59,6 +59,7 @@ export async function PATCH(nextRequest: NextRequest, { params }: Params) {
         title: body.title,
         description: body.description,
         assignedToUserId: body.assignedToUserId,
+        status: body.status,
       },
     })
     .catch((error) => {
