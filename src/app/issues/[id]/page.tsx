@@ -18,14 +18,6 @@ async function IssueDetailsPage({ params }: Props) {
 
   if (!issue) notFound();
 
-  const delay = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("resolved");
-    }, 3000);
-  });
-
-  await delay;
-
   return (
     <div className="m-10">
       <Heading>{issue.title}</Heading>
