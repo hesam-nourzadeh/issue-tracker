@@ -19,9 +19,18 @@ const columns: { label: string; value: keyof Issue; classname?: string }[] = [
 ];
 
 async function IssueListPage({ searchParams }: Prop) {
+  const statuses = Object.values(Status);
+  const isValidStatus = statuses.includes(searchParams.status!);
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParams.sortBy!)
+    ? { [searchParams.sortBy as string]: "desc" }
+    : undefined;
+
   // Issues should not be fetched directly. I should fix this
   const issues = await prisma.issue.findMany({
-    where: { status: searchParams.status },
+    where: { status: isValidStatus ? searchParams.status : undefined },
+    orderBy,
   });
 
   return (
