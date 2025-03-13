@@ -10,6 +10,7 @@ import { ApiClient } from "@/services/ApiClient";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import ErrorMessage from "@/components/ErrorMessage";
+import Spinner from "@/components/Spinner";
 
 type Issue = z.infer<typeof createIssueSchema>;
 
@@ -18,7 +19,7 @@ function CreateIssue() {
     register,
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<Issue>({ resolver: zodResolver(createIssueSchema) });
 
   const router = useRouter();
@@ -54,9 +55,7 @@ function CreateIssue() {
           render={({ field }) => <MarkdownEditor height={"150px"} {...field} />}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={!isValid} type="submit">
-          Create
-        </Button>
+        {isSubmitting ? <Spinner /> : <Button type="submit">Create</Button>}
         {apiError && (
           <Callout.Root>
             {errors.description && (
