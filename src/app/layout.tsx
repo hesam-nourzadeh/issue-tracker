@@ -13,8 +13,10 @@ import QueryClientProvider from "@/services/QueryClientProvider";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Issues Tracker",
-  description: "Issue tracker App",
+  title: {
+    template: "Issue Tracker | %s",
+    default: "Issue Tracker",
+  },
 };
 
 export default function RootLayout({

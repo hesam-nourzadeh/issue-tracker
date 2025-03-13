@@ -8,11 +8,11 @@ const IssueForm = dynamic(() => import("@/components/IssueForm"), {
   loading: () => <IssueFormSkeleton />,
 });
 
-type Prop = {
+type Props = {
   params: { id: string };
 };
 
-async function EditPage({ params }: Prop) {
+async function EditPage({ params }: Props) {
   const issue = await prisma.issue
     .findUnique({
       where: { id: parseInt(params.id) },
@@ -22,6 +22,17 @@ async function EditPage({ params }: Prop) {
   if (!issue) notFound();
 
   return <IssueForm issue={issue} />;
+}
+
+export async function generateMetadata({ params }: Props) {
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  return {
+    title: "Edit Issue: " + issue?.title,
+    description: issue?.description,
+  };
 }
 
 export default EditPage;

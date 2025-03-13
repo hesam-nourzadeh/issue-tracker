@@ -7,6 +7,7 @@ import { Issue, Status } from "@prisma/client";
 import Pagination from "@/components/Pagination";
 import { default as TableHeader } from "@/components/Table/Header";
 import { default as TableBody } from "@/components/Table/Body";
+import { Metadata } from "next";
 
 export type SearchParams = {
   status?: Status;
@@ -72,6 +73,10 @@ async function IssueListPage({ searchParams }: Prop) {
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "Issues List",
+  description: "List the current issues with applied filters",
+};
 
 export const dynamic = "force-dynamic";
 

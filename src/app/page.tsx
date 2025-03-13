@@ -11,6 +11,7 @@ import prisma from "../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
 import IssueSummary from "@/components/IssueSummary";
 import IssuesBarChart from "@/components/BarChart";
+import { Metadata } from "next";
 
 export default async function Home() {
   const issues = await prisma.issue.findMany({
@@ -59,4 +60,7 @@ export default async function Home() {
   );
 }
 
+export const metadata: Metadata = {
+  title: "Issue Tracker | Home Page",
+};
 export const dynamic = "force-dynamic";
