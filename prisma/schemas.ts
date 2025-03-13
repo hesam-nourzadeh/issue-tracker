@@ -21,7 +21,8 @@ export const IssueSchema = z.object({
     })
     .min(1)
     .max(254)
-    .nullable(),
+    .nullable()
+    .optional(),
 });
 
 export const OptionalIssueSchema = IssueSchema.partial();

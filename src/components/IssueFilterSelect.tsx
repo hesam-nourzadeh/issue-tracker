@@ -1,6 +1,7 @@
 "use client";
 import { Status } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function IssueFilterSelect() {
@@ -11,8 +12,15 @@ function IssueFilterSelect() {
     { label: "In Progress", value: "IN_PROGRESS" },
   ];
 
+  const router = useRouter();
+
   return (
-    <Select.Root>
+    <Select.Root
+      onValueChange={(status) => {
+        const query = status === "All" ? "" : `?status=${status}`;
+        router.push("/issues/list" + query);
+      }}
+    >
       <Select.Trigger placeholder="Filter Issues..." />
       <Select.Content>
         <Select.Group>
