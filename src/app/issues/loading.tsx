@@ -2,8 +2,7 @@ import LoadingTheme from "@/components/LoadingTheme";
 import { Button, Table } from "@radix-ui/themes";
 import Link from "next/link";
 import React from "react";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton";
 
 function LoadingIssuePage() {
   const issues = [1, 2, 3, 4, 5];

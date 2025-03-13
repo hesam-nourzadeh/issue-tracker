@@ -11,10 +11,7 @@ import ErrorMessage from "./ErrorMessage";
 import Spinner from "./Spinner";
 import dynamic from "next/dynamic";
 import { Issue } from "@prisma/client";
-
-const MarkdownEditor = dynamic(() => import("@uiw/react-markdown-editor"), {
-  ssr: false,
-});
+import MarkdownEditor from "@uiw/react-markdown-editor";
 
 function IssueForm({ issue }: { issue?: Issue }) {
   const {
