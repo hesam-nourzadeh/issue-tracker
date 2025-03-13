@@ -1,5 +1,6 @@
 import { Button, Table } from "@radix-ui/themes";
-import Link from "next/link";
+import Link from "@/components/Link";
+import NextLink from "next/link";
 import React from "react";
 import prisma from "../../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
@@ -9,9 +10,9 @@ async function IssuesPage() {
 
   return (
     <div className="m-8">
-      <Link href={"/create-issue"}>
+      <NextLink href={"/create-issue"}>
         <Button style={{ cursor: "pointer" }}>New Issue</Button>
-      </Link>
+      </NextLink>
       <Table.Root my={"5"} size={"3"} variant="surface">
         <Table.Header>
           <Table.Row>
