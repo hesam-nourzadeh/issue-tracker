@@ -6,6 +6,13 @@ import StatusBadge from "@/components/StatusBadge";
 
 async function IssuesPage() {
   const issues = await prisma.issue.findMany();
+  const delay = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("resolved");
+    }, 3000);
+  });
+
+  await delay;
 
   return (
     <div className="m-8">
