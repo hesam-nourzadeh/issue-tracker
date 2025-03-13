@@ -1,5 +1,5 @@
 import { Status } from "@prisma/client";
-import { Box, Card, Flex, Text } from "@radix-ui/themes";
+import { Card, Flex, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import React from "react";
 import StatusBadge from "./StatusBadge";
@@ -14,7 +14,7 @@ function IssueSummary({ open, inProgress, closed }: Prop) {
   ];
 
   return (
-    <Flex className="flex-row justify-center items-center my-5 space-x-8">
+    <Flex className="flex-col sm:flex-row justify-center sm:items-center my-5 sm:space-x-8 mx-3 sm:mx-auto space-y-3 sm:space-y-0">
       {statuses.map(({ status, count }, index) => (
         <Link
           className="text-blue-900"
@@ -23,7 +23,7 @@ function IssueSummary({ open, inProgress, closed }: Prop) {
         >
           <Card
             style={{ cursor: "pointer" }}
-            className="text-center p-3 hover:bg-slate-300"
+            className="text-center p-3 hover:bg-slate-300 border-slate-100"
           >
             <StatusBadge
               classname="cursor-pointer bg-inherit font-semibold"
