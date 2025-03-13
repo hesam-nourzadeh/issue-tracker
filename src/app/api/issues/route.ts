@@ -17,7 +17,7 @@ export async function POST(nextRequest: NextRequest) {
     data: { title: body.title, description: body.description },
   });
 
-  NextResponse.json({
+  return NextResponse.json({
     data: newIssue,
     message: "Issue creation was successful",
   });

@@ -8,7 +8,7 @@ function Navbar() {
   const currentPath = usePathname();
 
   return (
-    <nav className="p-7 flex flex-row items-center space-x-7 font-semibold border-b-2 border-gray-500 text-xl">
+    <nav className="p-7 flex flex-row items-center font-medium space-x-7 border-b-2 border-gray-500 text-xl">
       <Link href="/" className="text-3xl">
         <AiFillBug />
       </Link>
