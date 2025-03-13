@@ -1,10 +1,5 @@
-import { Button } from "@radix-ui/themes";
-import Link from "next/link";
+import Pagination from "@/components/Pagination";
 
 export default function Home() {
-  return (
-    <Button m={"4"}>
-      <Link href={"/issues/new"}>Create an issue</Link>
-    </Button>
-  );
+  return <Pagination itemCount={25} pageSize={5} currentPage={2} />;
 }
