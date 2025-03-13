@@ -30,7 +30,7 @@ function CreateIssue() {
       const apiClient = new ApiClient<Issue>("/api/issues");
       const newIssue = await apiClient.create(data);
       console.log(newIssue);
-      router.replace("/");
+      router.replace("/issues");
     } catch (err) {
       setApiError(err as AxiosError);
     }
