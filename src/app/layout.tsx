@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
-// import "./theme-config.css";
 import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
