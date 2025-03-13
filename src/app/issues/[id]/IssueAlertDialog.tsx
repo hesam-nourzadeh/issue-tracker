@@ -28,7 +28,7 @@ function IssueAlertDialog({ issueId }: { issueId: number }) {
         </Button>
       }
       action={async () => {
-        await apiClient.delete(issueId);
+        await apiClient.delete();
         router.replace("/issues/list");
         router.refresh();
         toast.showToast();
