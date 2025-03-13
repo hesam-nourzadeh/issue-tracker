@@ -23,13 +23,6 @@ function IssueForm({ issue }: { issue?: Issue }) {
   const router = useRouter();
   const [apiError, setApiError] = useState<AxiosError>();
 
-  const toast = new Toast(
-    issue
-      ? "Issue has been successfully edited."
-      : "Issue has been successfully created.",
-    "success"
-  );
-
   const onSubmit = async (data: Issue) => {
     try {
       const apiClient = new ApiClient<Issue>(
@@ -39,7 +32,12 @@ function IssueForm({ issue }: { issue?: Issue }) {
       else await apiClient.create(data);
       router.replace("/issues/list");
       router.refresh();
-      toast.showToast();
+      Toast.showToast(
+        issue
+          ? "Issue has been successfully edited."
+          : "Issue has been successfully created.",
+        "success"
+      );
     } catch (err) {
       setApiError(err as AxiosError);
     }

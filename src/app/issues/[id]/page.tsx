@@ -41,7 +41,7 @@ async function IssueDetailsPage({ params }: Props) {
           <ReactMarkdown>{issue.description}</ReactMarkdown>
         </Card>
       </Box>
-      <Flex className="sm:mx-16 flex-col md:flex-row w-8/12 mx-auto md:space-x-6 space-y-6 md:space-y-0">
+      <Flex className="sm:mx-16 my-10 sm:my-0 flex-col md:flex-row w-8/12 mx-auto md:space-x-6 space-y-6 md:space-y-0">
         {/* Put two different session validations because maybe later we define different access for different users */}
         {session && (
           <Button style={{ cursor: "pointer" }}>
@@ -50,7 +50,7 @@ async function IssueDetailsPage({ params }: Props) {
           </Button>
         )}
         {session && <IssueAlertDialog issueId={id} />}
-        {session && <UserSelectBinder />}
+        {session && <UserSelectBinder issue={issue} />}
       </Flex>
     </Flex>
   );

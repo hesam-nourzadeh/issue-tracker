@@ -10,7 +10,6 @@ import { AiFillCloseCircle } from "react-icons/ai";
 function IssueAlertDialog({ issueId }: { issueId: number }) {
   const apiClient = new ApiClient(`/api/issues/${issueId}`);
   const router = useRouter();
-  const toast = new Toast("Issue has been successfully deleted.", "success");
 
   return (
     <AlertDialog
@@ -31,7 +30,7 @@ function IssueAlertDialog({ issueId }: { issueId: number }) {
         await apiClient.delete();
         router.replace("/issues/list");
         router.refresh();
-        toast.showToast();
+        Toast.showToast("Issue has been successfully deleted.", "success");
       }}
     />
   );

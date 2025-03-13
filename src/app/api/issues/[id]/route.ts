@@ -10,8 +10,8 @@ type Params = { params: { id: string } };
 export async function PATCH(nextRequest: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
 
-  // if (!session)
-  //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  if (!session)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const body: Partial<Issue> = await nextRequest.json().catch((err) => {
     NextResponse.json(
