@@ -1,3 +1,4 @@
+import LoadingTheme from "@/components/LoadingTheme";
 import { Button, Table } from "@radix-ui/themes";
 import Link from "next/link";
 import React from "react";
@@ -9,10 +10,7 @@ function LoadingIssuePage() {
 
   return (
     <div className="m-8">
-      <SkeletonTheme
-        baseColor="rgba(160,160,160, 0.3)"
-        highlightColor="rgba(160,160,160, 0.5)"
-      >
+      <LoadingTheme>
         <Link href={"/create-issue"}>
           <Button style={{ cursor: "pointer" }}>New Issue</Button>
         </Link>
@@ -40,7 +38,7 @@ function LoadingIssuePage() {
             ))}
           </Table.Body>
         </Table.Root>
-      </SkeletonTheme>
+      </LoadingTheme>
     </div>
   );
 }
