@@ -7,12 +7,15 @@ import ReactMarkdown from "react-markdown";
 import { BiEdit } from "react-icons/bi";
 import Link from "next/link";
 import IssueAlertDialog from "./IssueAlertDialog";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 type Props = {
   params: { id: string };
 };
 
 async function IssueDetailsPage({ params }: Props) {
+  const session = await getServerSession(authOptions);
   const id = parseInt(params.id);
 
   if (!id) notFound();
@@ -38,15 +41,18 @@ async function IssueDetailsPage({ params }: Props) {
         </Card>
       </Box>
       <Flex className="sm:mx-16 flex-col md:flex-row w-8/12 mx-auto">
-        <Button
-          mx={{ sm: "4" }}
-          my={{ initial: "5", sm: "0" }}
-          style={{ cursor: "pointer" }}
-        >
-          <BiEdit />
-          <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
-        </Button>
-        <IssueAlertDialog issueId={id} />
+        {/* Put two different session validations because maybe later we define different access for different users */}
+        {session && (
+          <Button
+            mx={{ sm: "4" }}
+            my={{ initial: "5", sm: "0" }}
+            style={{ cursor: "pointer" }}
+          >
+            <BiEdit />
+            <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
+          </Button>
+        )}
+        {session && <IssueAlertDialog issueId={id} />}
       </Flex>
     </Flex>
   );
