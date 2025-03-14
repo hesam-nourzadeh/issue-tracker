@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { createIssueSchema } from "../../prisma/schemas";
+import { IssueSchema } from "../../prisma/schemas";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { ApiClient } from "@/services/ApiClient";
@@ -15,7 +15,7 @@ import dynamic from "next/dynamic";
 const MarkdownEditor = dynamic(() => import("@uiw/react-markdown-editor"), {
   ssr: false,
 });
-type Issue = z.infer<typeof createIssueSchema>;
+type Issue = z.infer<typeof IssueSchema>;
 
 function IssueForm({ issue }: { issue?: Issue }) {
   const {
@@ -23,7 +23,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Issue>({ resolver: zodResolver(createIssueSchema) });
+  } = useForm<Issue>({ resolver: zodResolver(IssueSchema) });
 
   const router = useRouter();
   const [apiError, setApiError] = useState<AxiosError>();

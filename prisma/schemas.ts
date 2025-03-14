@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const createIssueSchema = z.object({
+export const IssueSchema = z.object({
   title: z
     .string({
       invalid_type_error: "Title should be of type string.",
