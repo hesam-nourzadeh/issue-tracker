@@ -3,7 +3,7 @@ import { Card } from "@radix-ui/themes";
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 
-function loading() {
+function LoadingIssueDetailsPage() {
   return (
     <div className="m-10 w-4/12">
       <LoadingTheme>
@@ -16,4 +16,4 @@ function loading() {
   );
 }
 
-export default loading;
+export default LoadingIssueDetailsPage;

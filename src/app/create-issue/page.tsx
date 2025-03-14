@@ -1,6 +1,5 @@
 "use client";
 import { Button, Callout, TextField } from "@radix-ui/themes";
-import MarkdownEditor from "@uiw/react-markdown-editor";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import z from "zod";
@@ -11,7 +10,11 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import ErrorMessage from "@/components/ErrorMessage";
 import Spinner from "@/components/Spinner";
+import dynamic from "next/dynamic";
 
+const MarkdownEditor = dynamic(() => import("@uiw/react-markdown-editor"), {
+  ssr: false,
+});
 type Issue = z.infer<typeof createIssueSchema>;
 
 function CreateIssue() {
