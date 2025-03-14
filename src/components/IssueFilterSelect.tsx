@@ -15,13 +15,19 @@ function IssueFilterSelect() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const onValueChange = (status: string) => {
+    const newParams = new URLSearchParams();
+    newParams.append("status", status);
+    const sortBy = searchParams.get("sortBy");
+    if (sortBy) newParams.append("sortBy", searchParams.get("sortBy")!);
+    const query = "?" + newParams;
+    router.push("/issues/list" + query);
+  };
+
   return (
     <Select.Root
       defaultValue={searchParams.get("status") || "All"}
-      onValueChange={(status) => {
-        const query = status === "All" ? "" : `?status=${status}`;
-        router.push("/issues/list" + query);
-      }}
+      onValueChange={(status) => onValueChange(status)}
     >
       <Select.Trigger placeholder="Filter Issues..." />
       <Select.Content>
