@@ -33,6 +33,8 @@ function Pagination({ itemCount, pageSize, currentPage = 1 }: Props) {
     redirect("/issues/list?" + newSearchParams);
   }
 
+  if (itemCount <= pageSize) return null;
+
   return (
     <Box>
       <Flex align={"center"} gap={"1"}>

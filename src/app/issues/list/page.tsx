@@ -27,12 +27,21 @@ async function IssueListPage({ searchParams }: Prop) {
     .includes(searchParams.sortBy!)
     ? { [searchParams.sortBy as string]: "desc" }
     : undefined;
-
   // Issues should not be fetched directly. I should fix this
+  const currentPage = parseInt(searchParams.page!) || 1;
+  const pageSize = 10;
+
+  const whereClause = {
+    status: isValidStatus ? searchParams.status : undefined,
+  };
+
   const issues = await prisma.issue.findMany({
-    where: { status: isValidStatus ? searchParams.status : undefined },
+    where: whereClause,
     orderBy,
+    skip: (currentPage - 1) * pageSize,
+    take: pageSize,
   });
+  const issuesCount = await prisma.issue.count({ where: whereClause });
 
   return (
     <div className="m-8">
@@ -85,9 +94,9 @@ async function IssueListPage({ searchParams }: Prop) {
       </Table.Root>
       <Flex justify={"center"}>
         <Pagination
-          itemCount={50}
-          pageSize={5}
-          currentPage={parseInt(searchParams.page!)}
+          itemCount={issuesCount}
+          pageSize={pageSize}
+          currentPage={currentPage}
         />
       </Flex>
     </div>
