@@ -9,13 +9,12 @@ import { ApiClient } from "@/services/ApiClient";
 import { Button, Callout, TextField } from "@radix-ui/themes";
 import ErrorMessage from "./ErrorMessage";
 import Spinner from "./Spinner";
-import z from "zod";
 import dynamic from "next/dynamic";
+import { Issue } from "@prisma/client";
 
 const MarkdownEditor = dynamic(() => import("@uiw/react-markdown-editor"), {
   ssr: false,
 });
-type Issue = z.infer<typeof IssueSchema>;
 
 function IssueForm({ issue }: { issue?: Issue }) {
   const {
@@ -30,9 +29,11 @@ function IssueForm({ issue }: { issue?: Issue }) {
 
   const onSubmit = async (data: Issue) => {
     try {
-      const apiClient = new ApiClient<Issue>("/api/issues");
-      const newIssue = await apiClient.create(data);
-      console.log(newIssue);
+      const apiClient = new ApiClient<Issue>(
+        `${issue ? `/api/issues/${issue.id}` : `/api/issues`}`
+      );
+      if (issue) await apiClient.update(data);
+      else await apiClient.create(data);
       router.replace("/issues");
     } catch (err) {
       setApiError(err as AxiosError);
@@ -60,7 +61,11 @@ function IssueForm({ issue }: { issue?: Issue }) {
           render={({ field }) => <MarkdownEditor height={"150px"} {...field} />}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        {isSubmitting ? <Spinner /> : <Button type="submit">Create</Button>}
+        {isSubmitting ? (
+          <Spinner />
+        ) : (
+          <Button type="submit">{issue ? "Edit" : "Create"}</Button>
+        )}
         {apiError && (
           <Callout.Root>
             {errors.description && (

@@ -8,4 +8,6 @@ export class ApiClient<T> {
   }
 
   create = (data: T) => httpService.post<T>(this.endpoint, data);
+
+  update = (data: T) => httpService.patch<T>(this.endpoint, data);
 }
