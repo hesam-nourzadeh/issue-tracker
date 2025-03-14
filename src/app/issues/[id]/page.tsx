@@ -13,9 +13,13 @@ type Props = {
 };
 
 async function IssueDetailsPage({ params }: Props) {
+  const id = parseInt(params.id);
+
+  if (!id) notFound();
+
   const issue = await prisma.issue
     .findUnique({
-      where: { id: parseInt(params.id) },
+      where: { id },
     })
     .catch(() => notFound());
 
@@ -42,7 +46,7 @@ async function IssueDetailsPage({ params }: Props) {
           <BiEdit />
           <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
         </Button>
-        <IssueAlertDialog />
+        <IssueAlertDialog issueId={params.id} />
       </Flex>
     </Flex>
   );

@@ -1,10 +1,15 @@
 "use client";
 import AlertDialog from "@/components/AlertDialog";
+import { ApiClient } from "@/services/ApiClient";
 import { Button } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-function IssueAlertDialog() {
+function IssueAlertDialog({ issueId }: { issueId: number }) {
+  const apiClient = new ApiClient(`/api/issues/${issueId}`);
+  const router = useRouter();
+
   return (
     <AlertDialog
       trigger={
@@ -20,8 +25,10 @@ function IssueAlertDialog() {
           Delete
         </Button>
       }
-      action={() => {
-        console.log("cyka");
+      action={async () => {
+        await apiClient.delete(issueId);
+        router.replace("/issues");
+        router.refresh();
       }}
     />
   );
