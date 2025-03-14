@@ -30,7 +30,9 @@ async function IssuesPage() {
         <Table.Body>
           {issues.map((value, index) => (
             <Table.Row key={index}>
-              <Table.Cell>{value.title}</Table.Cell>
+              <Table.Cell>
+                <Link href={`/issues/${value.id}`}>{value.title}</Link>
+              </Table.Cell>
               <Table.Cell>
                 <StatusBadge status={value.status} />
               </Table.Cell>
