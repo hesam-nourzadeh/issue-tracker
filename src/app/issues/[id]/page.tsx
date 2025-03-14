@@ -6,7 +6,7 @@ import StatusBadge from "@/components/StatusBadge";
 import ReactMarkdown from "react-markdown";
 import { BiEdit } from "react-icons/bi";
 import Link from "next/link";
-import { AiFillCloseCircle } from "react-icons/ai";
+import IssueAlertDialog from "./IssueAlertDialog";
 
 type Props = {
   params: { id: string };
@@ -37,17 +37,12 @@ async function IssueDetailsPage({ params }: Props) {
         <Button
           mx={{ sm: "4" }}
           my={{ initial: "5", sm: "0" }}
-          className="cursor-pointer"
+          style={{ cursor: "pointer" }}
         >
           <BiEdit />
-          <Link className="cursor-default" href={`/issues/${issue.id}/edit`}>
-            Edit Issue
-          </Link>
+          <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
         </Button>
-        <Button color="red">
-          <AiFillCloseCircle />
-          Delete Issue
-        </Button>
+        <IssueAlertDialog />
       </Flex>
     </Flex>
   );

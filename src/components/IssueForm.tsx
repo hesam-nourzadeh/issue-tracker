@@ -62,7 +62,9 @@ function IssueForm({ issue }: { issue?: Issue }) {
         {isSubmitting ? (
           <Spinner />
         ) : (
-          <Button type="submit">{issue ? "Edit" : "Create"}</Button>
+          <Button style={{ cursor: "pointer" }} type="submit">
+            {issue ? "Edit" : "Create"}
+          </Button>
         )}
         {apiError && (
           <Callout.Root>
