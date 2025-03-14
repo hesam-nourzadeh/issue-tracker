@@ -14,4 +14,14 @@ export const IssueSchema = z.object({
       required_error: "Description is required.",
     })
     .min(1, "Description should be at least 1 character."),
+  assignedToUserId: z
+    .string({
+      invalid_type_error: "User ID must be of type string",
+      required_error: "User ID is required",
+    })
+    .min(1)
+    .max(254)
+    .nullable(),
 });
+
+export const OptionalIssueSchema = IssueSchema.partial();

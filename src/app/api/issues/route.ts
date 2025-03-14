@@ -20,9 +20,16 @@ export async function POST(nextRequest: NextRequest) {
       { status: 403 }
     );
 
-  const newIssue = await prisma.issue.create({
-    data: { title: body.title, description: body.description },
-  });
+  const newIssue = await prisma.issue
+    .create({
+      data: { title: body.title, description: body.description },
+    })
+    .catch((error) => {
+      NextResponse.json(
+        { message: "Could not create the issue", error },
+        { status: 400 }
+      );
+    });
 
   return NextResponse.json({
     data: newIssue,
