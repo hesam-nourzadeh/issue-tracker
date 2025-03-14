@@ -2,6 +2,7 @@ import { Avatar, Card, Flex, Heading, Separator, Text } from "@radix-ui/themes";
 import prisma from "../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
 import IssueSummary from "@/components/IssueSummary";
+import IssuesBarChart from "@/components/BarChart";
 
 export default async function Home() {
   const issues = await prisma.issue.findMany({
@@ -43,6 +44,7 @@ export default async function Home() {
           </div>
         ))}
       </Card>
+      <IssuesBarChart open={open} inProgress={inProgress} closed={closed} />
     </>
   );
 }

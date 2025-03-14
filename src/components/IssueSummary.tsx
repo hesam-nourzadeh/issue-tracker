@@ -4,9 +4,9 @@ import Link from "next/link";
 import React from "react";
 import StatusBadge from "./StatusBadge";
 
-type Prop = { open: number; inProgress: number; closed: number };
+type Props = { open: number; inProgress: number; closed: number };
 
-function IssueSummary({ open, inProgress, closed }: Prop) {
+function IssueSummary({ open, inProgress, closed }: Props) {
   const statuses: { status: Status; count: number }[] = [
     { status: "OPEN", count: open },
     { status: "IN_PROGRESS", count: inProgress },
