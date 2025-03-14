@@ -9,7 +9,6 @@ import Link from "next/link";
 import IssueAlertDialog from "./IssueAlertDialog";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import UserSelect from "@/components/UserSelect";
 import UserSelectBinder from "./UserSelectBinder";
 
 type Props = {

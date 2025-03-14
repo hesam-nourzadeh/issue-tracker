@@ -8,6 +8,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import AuthProvider from "@/components/AuthProvider";
+import QueryClientProvider from "@/services/QueryClientProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -37,8 +38,10 @@ export default function RootLayout({
         />
         <Theme>
           <AuthProvider>
-            <Navbar />
-            {children}
+            <QueryClientProvider>
+              <Navbar />
+              {children}
+            </QueryClientProvider>
           </AuthProvider>
         </Theme>
       </body>
