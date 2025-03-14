@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cache } from "react";
 import prisma from "../../../../prisma/client";
 import { notFound } from "next/navigation";
 import { Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
@@ -15,19 +15,21 @@ type Props = {
   params: { id: string };
 };
 
+const getIssue = cache((id: number) =>
+  prisma.issue.findUnique({
+    where: { id },
+  })
+);
+
 async function IssueDetailsPage({ params }: Props) {
   const session = await getServerSession(authOptions);
   const id = parseInt(params.id);
 
   if (!id) notFound();
 
-  const issue = await prisma.issue
-    .findUnique({
-      where: { id },
-    })
-    .catch(() => notFound());
+  const issue = await getIssue(id).catch((err) => notFound());
 
-  if (!issue) notFound();
+  if (!issue) return notFound();
 
   return (
     <Flex className="m-10 flex-col sm:flex-row">
