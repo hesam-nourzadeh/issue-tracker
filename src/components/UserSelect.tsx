@@ -9,22 +9,24 @@ function UserSelect({ users, issue }: { users: User[]; issue: Issue }) {
   const pointerCursor = { cursor: "pointer" };
   const apiClient = new ApiClient<Partial<Issue>>(`/api/issues/${issue.id}`);
 
+  const assignIssue = async (userId: string) => {
+    try {
+      const updatedIssue = await apiClient.update({
+        assignedToUserId: userId === "unassigned" ? null : userId,
+      });
+      if (userId === "unassigned")
+        return Toast.showToast("Issue unassigned.", "success");
+
+      Toast.showToast("Issue assigned.", "success");
+    } catch (err) {
+      Toast.showToast("An unexpected error occured.", "error");
+    }
+  };
+
   return (
     <Select.Root
       defaultValue={issue.assignedToUserId || "unassigned"}
-      onValueChange={async (userId) => {
-        try {
-          const updatedIssue = await apiClient.update({
-            assignedToUserId: userId === "unassigned" ? null : userId,
-          });
-          if (userId === "unassigned")
-            return Toast.showToast("Issue unassigned.", "success");
-
-          Toast.showToast("Issue assigned.", "success");
-        } catch (err) {
-          Toast.showToast("An unexpected error occured.", "error");
-        }
-      }}
+      onValueChange={(userId) => assignIssue(userId)}
     >
       <Select.Trigger placeholder="Select a user..."></Select.Trigger>
       <Select.Content>
