@@ -1,15 +1,15 @@
 "use client";
-import { Button, Callout, TextField } from "@radix-ui/themes";
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import z from "zod";
-import { createIssueSchema } from "../../../prisma/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ApiClient } from "@/services/ApiClient";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { createIssueSchema } from "../../prisma/schemas";
 import { AxiosError } from "axios";
-import ErrorMessage from "@/components/ErrorMessage";
-import Spinner from "@/components/Spinner";
+import { useRouter } from "next/navigation";
+import { ApiClient } from "@/services/ApiClient";
+import { Button, Callout, TextField } from "@radix-ui/themes";
+import ErrorMessage from "./ErrorMessage";
+import Spinner from "./Spinner";
+import z from "zod";
 import dynamic from "next/dynamic";
 
 const MarkdownEditor = dynamic(() => import("@uiw/react-markdown-editor"), {
@@ -17,12 +17,12 @@ const MarkdownEditor = dynamic(() => import("@uiw/react-markdown-editor"), {
 });
 type Issue = z.infer<typeof createIssueSchema>;
 
-function CreateIssue() {
+function IssueForm({ issue }: { issue?: Issue }) {
   const {
     register,
     control,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<Issue>({ resolver: zodResolver(createIssueSchema) });
 
   const router = useRouter();
@@ -47,13 +47,15 @@ function CreateIssue() {
         <TextField.Root>
           <TextField.Input
             {...register("title", { required: true })}
-            placeholder="hello"
+            placeholder="title"
+            defaultValue={issue?.title}
           />
         </TextField.Root>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name="description"
           control={control}
+          defaultValue={issue?.description}
           rules={{ required: true }}
           render={({ field }) => <MarkdownEditor height={"150px"} {...field} />}
         />
@@ -71,4 +73,4 @@ function CreateIssue() {
   );
 }
 
-export default CreateIssue;
+export default IssueForm;

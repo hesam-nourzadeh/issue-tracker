@@ -10,7 +10,7 @@ async function IssuesPage() {
 
   return (
     <div className="m-8">
-      <NextLink href={"/create-issue"}>
+      <NextLink href={"/issues/new"}>
         <Button style={{ cursor: "pointer" }}>New Issue</Button>
       </NextLink>
       <Table.Root my={"5"} size={"3"} variant="surface">
