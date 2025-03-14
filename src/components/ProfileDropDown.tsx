@@ -21,8 +21,8 @@ function ProfileDropDown({ data }: { data: Session }) {
             {data.user?.email}
           </Text>
         </DropdownMenu.Label>
-        <DropdownMenu.Item asChild style={{ cursor: "pointer" }}>
-          <Link href={"/api/auth/signout"}>
+        <DropdownMenu.Item asChild>
+          <Link href={"/api/auth/signout"} style={{ cursor: "pointer" }}>
             <Text weight={"bold"} mx={"auto"} align={"center"}>
               Logout
             </Text>

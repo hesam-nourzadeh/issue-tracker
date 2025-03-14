@@ -13,7 +13,7 @@ function Navbar() {
   const { status, data } = useSession();
 
   return (
-    <nav className="p-7 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 font-medium border-b-2 border-gray-500 text-xl">
+    <nav className="p-7 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 font-medium border-b-2 border-gray-300 text-xl">
       <Box className="flex flex-col sm:flex-row sm:space-x-7 space-y-2 sm:space-y-0 items-center">
         <Link href="/" className="text-3xl">
           <AiFillBug />
@@ -21,7 +21,7 @@ function Navbar() {
         <Link
           className={`${
             currentPath === "/dashboard" ? "text-zinc-800" : "text-zinc-500"
-          } hover:text-zinc-800 transition-colors`}
+          } nav-link`}
           href="/dashboard"
         >
           Dashboard
@@ -30,7 +30,7 @@ function Navbar() {
         <Link
           className={`${
             currentPath === "/issues/list" ? "text-zinc-800" : "text-zinc-500"
-          } hover:text-zinc-800 transition-colors`}
+          } nav-link`}
           href="/issues/list"
         >
           Issues
