@@ -11,11 +11,17 @@ const badgeModes: Record<
   OPEN: { tag: "OPEN", color: "blue" },
 };
 
-function StatusBadge({ status }: { status: Status }) {
+function StatusBadge({
+  status,
+  classname,
+}: {
+  status: Status;
+  classname?: string;
+}) {
   const badgeMode = badgeModes[status];
 
   return (
-    <Badge className="p-0" color={badgeMode.color}>
+    <Badge className={`p-0 ${classname}`} color={badgeMode.color}>
       {badgeMode.tag}
     </Badge>
   );
