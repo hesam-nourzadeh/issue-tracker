@@ -29,7 +29,7 @@ function IssueAlertDialog({ issueId }: { issueId: number }) {
       }
       action={async () => {
         await apiClient.delete(issueId);
-        router.replace("/issues");
+        router.replace("/issues/list");
         router.refresh();
         toast.showToast();
       }}

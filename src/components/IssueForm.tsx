@@ -37,7 +37,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
       );
       if (issue) await apiClient.update(data);
       else await apiClient.create(data);
-      router.replace("/issues");
+      router.replace("/issues/list");
       router.refresh();
       toast.showToast();
     } catch (err) {
