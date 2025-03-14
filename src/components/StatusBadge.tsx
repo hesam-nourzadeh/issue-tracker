@@ -14,7 +14,11 @@ const badgeModes: Record<
 function StatusBadge({ status }: { status: Status }) {
   const badgeMode = badgeModes[status];
 
-  return <Badge color={badgeMode.color}>{badgeMode.tag}</Badge>;
+  return (
+    <Badge className="p-0" color={badgeMode.color}>
+      {badgeMode.tag}
+    </Badge>
+  );
 }
 
 export default StatusBadge;
