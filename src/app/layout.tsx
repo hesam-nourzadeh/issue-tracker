@@ -7,6 +7,7 @@ import { Theme } from "@radix-ui/themes";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import AuthProvider from "@/components/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -35,8 +36,10 @@ export default function RootLayout({
           theme="light"
         />
         <Theme>
-          <Navbar />
-          {children}
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
         </Theme>
       </body>
     </html>
