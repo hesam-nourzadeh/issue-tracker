@@ -2,10 +2,10 @@ import { Button, Table } from "@radix-ui/themes";
 import Link from "@/components/Link";
 import NextLink from "next/link";
 import React from "react";
-import prisma from "../../../prisma/client";
+import prisma from "../../../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
 
-async function IssuesPage() {
+async function IssueListPage() {
   const issues = await prisma.issue.findMany();
 
   return (
@@ -45,4 +45,4 @@ async function IssuesPage() {
 
 export const dynamic = "force-dynamic";
 
-export default IssuesPage;
+export default IssueListPage;

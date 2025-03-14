@@ -26,9 +26,9 @@ function Navbar() {
         <li>
           <Link
             className={`${
-              currentPath === "/issues" ? "text-zinc-800" : "text-zinc-500"
+              currentPath === "/issues/list" ? "text-zinc-800" : "text-zinc-500"
             } hover:text-zinc-800 transition-colors`}
-            href="/issues"
+            href="/issues/list"
           >
             Issues
           </Link>
