@@ -6,6 +6,7 @@ import StatusBadge from "@/components/StatusBadge";
 import ReactMarkdown from "react-markdown";
 import { BiEdit } from "react-icons/bi";
 import Link from "next/link";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 type Props = {
   params: { id: string };
@@ -32,14 +33,22 @@ async function IssueDetailsPage({ params }: Props) {
           <ReactMarkdown>{issue.description}</ReactMarkdown>
         </Card>
       </Box>
-      <Button
-        mx={{ initial: "3", sm: "9" }}
-        my={{ initial: "5", sm: "0" }}
-        className="cursor-pointer"
-      >
-        <BiEdit />
-        <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
-      </Button>
+      <Flex className="sm:mx-16 flex-col md:flex-row w-8/12 mx-auto">
+        <Button
+          mx={{ sm: "4" }}
+          my={{ initial: "5", sm: "0" }}
+          className="cursor-pointer"
+        >
+          <BiEdit />
+          <Link className="cursor-default" href={`/issues/${issue.id}/edit`}>
+            Edit Issue
+          </Link>
+        </Button>
+        <Button color="red">
+          <AiFillCloseCircle />
+          Delete Issue
+        </Button>
+      </Flex>
     </Flex>
   );
 }
