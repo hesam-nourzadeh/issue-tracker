@@ -12,7 +12,7 @@ function IssuesBarChart({ open, inProgress, closed }: Props) {
   ];
 
   return (
-    <ResponsiveContainer className={"mx-auto"} width={"60%"} height={300}>
+    <ResponsiveContainer width={"85%"} height={500}>
       <BarChart data={data}>
         <XAxis dataKey={"label"} />
         <YAxis />

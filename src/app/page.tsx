@@ -1,4 +1,12 @@
-import { Avatar, Card, Flex, Heading, Separator, Text } from "@radix-ui/themes";
+import {
+  Avatar,
+  Card,
+  Flex,
+  Grid,
+  Heading,
+  Separator,
+  Text,
+} from "@radix-ui/themes";
 import prisma from "../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
 import IssueSummary from "@/components/IssueSummary";
@@ -17,8 +25,11 @@ export default async function Home() {
   const open = await prisma.issue.count({ where: { status: "OPEN" } });
 
   return (
-    <>
-      <IssueSummary closed={closed} inProgress={inProgress} open={open} />
+    <Grid columns={{ initial: "1", md: "2" }}>
+      <Flex direction={"column"} align={{ initial: "stretch", md: "center" }}>
+        <IssueSummary closed={closed} inProgress={inProgress} open={open} />
+        <IssuesBarChart open={open} inProgress={inProgress} closed={closed} />
+      </Flex>
       <Card className="m-10">
         <Heading size={"7"} className="m-2">
           Recent Issues
@@ -44,8 +55,7 @@ export default async function Home() {
           </div>
         ))}
       </Card>
-      <IssuesBarChart open={open} inProgress={inProgress} closed={closed} />
-    </>
+    </Grid>
   );
 }
 
