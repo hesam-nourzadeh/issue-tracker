@@ -20,9 +20,9 @@ function Navbar() {
         </Link>
         <Link
           className={`${
-            currentPath === "/dashboard" ? "text-zinc-800" : "text-zinc-500"
+            currentPath === "/" ? "text-zinc-800" : "text-zinc-500"
           } nav-link`}
-          href="/dashboard"
+          href="/"
         >
           Dashboard
         </Link>
