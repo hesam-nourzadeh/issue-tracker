@@ -16,10 +16,10 @@ function IssueFilterSelect() {
   const searchParams = useSearchParams();
 
   const onValueChange = (status: string) => {
-    const newParams = new URLSearchParams();
-    newParams.append("status", status);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("status", status);
     const sortBy = searchParams.get("sortBy");
-    if (sortBy) newParams.append("sortBy", searchParams.get("sortBy")!);
+    if (sortBy) newParams.set("sortBy", searchParams.get("sortBy")!);
     const query = "?" + newParams;
     router.push("/issues/list" + query);
   };

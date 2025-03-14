@@ -7,9 +7,10 @@ import StatusBadge from "@/components/StatusBadge";
 import IssueFilterSelect from "@/components/Selects/IssueFilterSelect";
 import { Issue, Status } from "@prisma/client";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import Pagination from "@/components/Pagination";
 
 type Prop = {
-  searchParams: { status?: Status; sortBy?: keyof Issue };
+  searchParams: { status?: Status; sortBy?: keyof Issue; page?: string };
 };
 
 const columns: { label: string; value: keyof Issue; classname?: string }[] = [
@@ -82,6 +83,13 @@ async function IssueListPage({ searchParams }: Prop) {
           ))}
         </Table.Body>
       </Table.Root>
+      <Flex justify={"center"}>
+        <Pagination
+          itemCount={50}
+          pageSize={5}
+          currentPage={parseInt(searchParams.page!)}
+        />
+      </Flex>
     </div>
   );
 }

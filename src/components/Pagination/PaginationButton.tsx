@@ -1,10 +1,22 @@
+"use client";
 import { Button } from "@radix-ui/themes";
 import React, { ReactNode } from "react";
-import { IconContext } from "react-icons";
 
-function PaginationButton({ children }: { children: ReactNode }) {
+type Props = {
+  onClick: () => void;
+  children: ReactNode;
+  disabled: boolean;
+};
+
+function PaginationButton({ children, onClick, disabled }: Props) {
   return (
-    <Button className="cursor-pointer" variant="soft" color="violet">
+    <Button
+      disabled={disabled}
+      onClick={onClick}
+      className="cursor-pointer"
+      variant="soft"
+      color="violet"
+    >
       {children}
     </Button>
   );
