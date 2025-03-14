@@ -1,18 +1,22 @@
-import { Button, Table } from "@radix-ui/themes";
+import { Button, Flex, Table } from "@radix-ui/themes";
 import Link from "@/components/Link";
 import NextLink from "next/link";
 import React from "react";
 import prisma from "../../../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
+import IssueFilterSelect from "@/components/IssueFilterSelect";
 
 async function IssueListPage() {
   const issues = await prisma.issue.findMany();
 
   return (
     <div className="m-8">
-      <NextLink href={"/issues/new"}>
-        <Button style={{ cursor: "pointer" }}>New Issue</Button>
-      </NextLink>
+      <Flex className="flex-col space-y-4 sm:space-y-0 items-stretch sm:flex-row sm:justify-between lg:w-3/12">
+        <IssueFilterSelect />
+        <NextLink href={"/issues/new"} className="mx-auto sm:mx-0">
+          <Button style={{ cursor: "pointer" }}>New Issue</Button>
+        </NextLink>
+      </Flex>
       <Table.Root my={"5"} size={"3"} variant="surface">
         <Table.Header>
           <Table.Row>
