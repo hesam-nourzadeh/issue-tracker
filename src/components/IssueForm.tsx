@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { ApiClient } from "@/services/ApiClient";
 import { Button, Callout, TextField } from "@radix-ui/themes";
 import ErrorMessage from "./ErrorMessage";
-import Spinner from "./Spinner";
+import Spinner from "./Placeholder/Spinner";
 import { Issue } from "@prisma/client";
 import MarkdownEditor from "@uiw/react-markdown-editor";
 import Toast from "@/services/Toast";

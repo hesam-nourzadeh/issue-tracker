@@ -1,5 +1,5 @@
 "use client";
-import UserSelect from "@/components/UserSelect";
+import UserSelect from "@/components/Selects/UserSelect";
 import { ApiClient } from "@/services/ApiClient";
 import Toast from "@/services/Toast";
 import { Issue, User } from "@prisma/client";

@@ -1,4 +1,4 @@
-import LoadingTheme from "@/components/LoadingTheme";
+import LoadingTheme from "@/components/Placeholder/LoadingTheme";
 import { Card } from "@radix-ui/themes";
 import React from "react";
 import Skeleton from "react-loading-skeleton";

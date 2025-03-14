@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import React from "react";
 import prisma from "../../../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
-import IssueFilterSelect from "@/components/IssueFilterSelect";
+import IssueFilterSelect from "@/components/Selects/IssueFilterSelect";
 import { Issue, Status } from "@prisma/client";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 

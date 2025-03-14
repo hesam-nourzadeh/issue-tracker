@@ -1,4 +1,4 @@
-import LoadingTheme from "@/components/LoadingTheme";
+import LoadingTheme from "@/components/Placeholder/LoadingTheme";
 import { Button, Table } from "@radix-ui/themes";
 import Link from "next/link";
 import React from "react";

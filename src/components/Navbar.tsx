@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { AiFillBug } from "react-icons/ai";
-import Spinner from "./Spinner";
+import Spinner from "./Placeholder/Spinner";
 import ProfileDropDown from "./ProfileDropDown";
 
 function Navbar() {

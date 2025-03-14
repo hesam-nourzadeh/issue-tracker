@@ -1,4 +1,4 @@
-import IssueFormSkeleton from "@/components/IssueFormSkeleton";
+import IssueFormSkeleton from "@/components/Placeholder/IssueFormSkeleton";
 import dynamic from "next/dynamic";
 
 const IssueForm = dynamic(() => import("@/components/IssueForm"), {
