@@ -5,11 +5,18 @@ import React from "react";
 import prisma from "../../../../prisma/client";
 import StatusBadge from "@/components/StatusBadge";
 import IssueFilterSelect from "@/components/IssueFilterSelect";
-import { Status } from "@prisma/client";
+import { Issue, Status } from "@prisma/client";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 type Prop = {
-  searchParams: { status: Status };
+  searchParams: { status?: Status; sortBy?: keyof Issue };
 };
+
+const columns: { label: string; value: keyof Issue; classname?: string }[] = [
+  { label: "Title", value: "title" },
+  { label: "Status", value: "status" },
+  { label: "Creation", value: "createdAt", classname: "hidden sm:block" },
+];
 
 async function IssueListPage({ searchParams }: Prop) {
   // Issues should not be fetched directly. I should fix this
@@ -28,11 +35,26 @@ async function IssueListPage({ searchParams }: Prop) {
       <Table.Root my={"5"} size={"3"} variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>title</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>status</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden sm:block">
-              Creation
-            </Table.ColumnHeaderCell>
+            {columns.map((column, index) => (
+              <Table.ColumnHeaderCell key={index} className={column.classname}>
+                <NextLink
+                  href={{ query: { ...searchParams, sortBy: column.value } }}
+                >
+                  {column.label}
+                  {searchParams.sortBy === column.value ? (
+                    <BiChevronUp
+                      style={{ display: "inline" }}
+                      size={"1.1rem"}
+                    />
+                  ) : (
+                    <BiChevronDown
+                      style={{ display: "inline" }}
+                      size={"1.1rem"}
+                    />
+                  )}
+                </NextLink>
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
