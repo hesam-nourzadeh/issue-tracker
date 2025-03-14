@@ -6,13 +6,11 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { AiFillBug } from "react-icons/ai";
 import Spinner from "./Spinner";
+import ProfileDropDown from "./ProfileDropDown";
 
 function Navbar() {
   const currentPath = usePathname();
   const { status, data } = useSession();
-
-  const authLinkClassname =
-    "text-zinc-500 hover:text-zinc-800 justify-self-end";
 
   return (
     <nav className="p-7 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 font-medium border-b-2 border-gray-500 text-xl">
@@ -47,13 +45,12 @@ function Navbar() {
             />
           </Box>
         )}
-        {status === "authenticated" && (
-          <Link className={authLinkClassname} href={"/api/auth/signout"}>
-            Logout
-          </Link>
-        )}
+        {status === "authenticated" && <ProfileDropDown data={data} />}
         {status === "unauthenticated" && (
-          <Link className={authLinkClassname} href={"/api/auth/signin"}>
+          <Link
+            className="text-zinc-500 hover:text-zinc-800 justify-self-end"
+            href={"/api/auth/signin"}
+          >
             Login
           </Link>
         )}
