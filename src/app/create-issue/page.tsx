@@ -1,42 +1,80 @@
 "use client";
-import { Button, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import MarkdownEditor from "@uiw/react-markdown-editor";
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import z from "zod";
 import { createIssueSchema } from "../../../prisma/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ApiClient } from "@/services/ApiClient";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 type Issue = z.infer<typeof createIssueSchema>;
 
 function CreateIssue() {
-  const { register, control, handleSubmit } = useForm<Issue>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<Issue>({ resolver: zodResolver(createIssueSchema) });
+
   const router = useRouter();
+  const [apiError, setApiError] = useState<AxiosError>();
 
   const onSubmit = async (data: Issue) => {
-    const apiClient = new ApiClient<Issue>("/api/issues");
-    const newIssue = await apiClient.create(data);
-    console.log(newIssue);
-    router.replace("/");
+    try {
+      const apiClient = new ApiClient<Issue>("/api/issues");
+      const newIssue = await apiClient.create(data);
+      console.log(newIssue);
+      router.replace("/");
+    } catch (err) {
+      setApiError(err as AxiosError);
+    }
   };
-
   return (
-    <form
-      className="max-w-xl space-y-1 m-10"
-      onSubmit={handleSubmit((data) => onSubmit(data))}
-    >
-      <TextField.Root>
-        <TextField.Input {...register("title")} placeholder="hello" />
-      </TextField.Root>
-      <Controller
-        name="description"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => <MarkdownEditor height={"150px"} {...field} />}
-      />
-      <Button>Create</Button>
-    </form>
+    <div className="max-w-xl m-10">
+      <form
+        className="space-y-1"
+        onSubmit={handleSubmit((data) => onSubmit(data))}
+      >
+        <TextField.Root>
+          <TextField.Input
+            {...register("title", { required: true })}
+            placeholder="hello"
+          />
+        </TextField.Root>
+        <Callout.Root>
+          {errors.title && (
+            <Callout.Text color="red">{errors.title.message}</Callout.Text>
+          )}
+        </Callout.Root>
+        <Controller
+          name="description"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <MarkdownEditor height={"150px"} {...field} />}
+        />
+        <Callout.Root>
+          {errors.description && (
+            <Callout.Text color="red">
+              {errors.description.message}
+            </Callout.Text>
+          )}
+        </Callout.Root>
+        <Button disabled={!isValid} type="submit">
+          Create
+        </Button>
+        {apiError && (
+          <Callout.Root>
+            {errors.description && (
+              <Callout.Text color="red">{apiError.message}</Callout.Text>
+            )}
+          </Callout.Root>
+        )}
+      </form>
+    </div>
   );
 }
 

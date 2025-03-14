@@ -9,7 +9,7 @@ export async function POST(nextRequest: NextRequest) {
 
   if (!validation.success)
     return NextResponse.json(
-      { error: validation.error.errors, message: "Validation failed" },
+      { error: validation.error.format(), message: "Validation failed" },
       { status: 403 }
     );
 
