@@ -35,6 +35,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
       if (issue) await apiClient.update(data);
       else await apiClient.create(data);
       router.replace("/issues");
+      router.refresh();
     } catch (err) {
       setApiError(err as AxiosError);
     }
