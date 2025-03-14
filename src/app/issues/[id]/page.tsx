@@ -46,7 +46,7 @@ async function IssueDetailsPage({ params }: Props) {
           <BiEdit />
           <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
         </Button>
-        <IssueAlertDialog issueId={params.id} />
+        <IssueAlertDialog issueId={id} />
       </Flex>
     </Flex>
   );

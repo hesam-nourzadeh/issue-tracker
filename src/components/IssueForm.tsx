@@ -11,6 +11,7 @@ import ErrorMessage from "./ErrorMessage";
 import Spinner from "./Spinner";
 import { Issue } from "@prisma/client";
 import MarkdownEditor from "@uiw/react-markdown-editor";
+import Toast from "@/services/Toast";
 
 function IssueForm({ issue }: { issue?: Issue }) {
   const {
@@ -19,9 +20,15 @@ function IssueForm({ issue }: { issue?: Issue }) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<Issue>({ resolver: zodResolver(IssueSchema) });
-
   const router = useRouter();
   const [apiError, setApiError] = useState<AxiosError>();
+
+  const toast = new Toast(
+    issue
+      ? "Issue has been successfully edited."
+      : "Issue has been successfully created.",
+    "success"
+  );
 
   const onSubmit = async (data: Issue) => {
     try {
@@ -32,6 +39,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
       else await apiClient.create(data);
       router.replace("/issues");
       router.refresh();
+      toast.showToast();
     } catch (err) {
       setApiError(err as AxiosError);
     }

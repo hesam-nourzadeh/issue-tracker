@@ -1,6 +1,7 @@
 "use client";
 import AlertDialog from "@/components/AlertDialog";
 import { ApiClient } from "@/services/ApiClient";
+import Toast from "@/services/Toast";
 import { Button } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -9,6 +10,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 function IssueAlertDialog({ issueId }: { issueId: number }) {
   const apiClient = new ApiClient(`/api/issues/${issueId}`);
   const router = useRouter();
+  const toast = new Toast("Issue has been successfully deleted.", "success");
 
   return (
     <AlertDialog
@@ -29,6 +31,7 @@ function IssueAlertDialog({ issueId }: { issueId: number }) {
         await apiClient.delete(issueId);
         router.replace("/issues");
         router.refresh();
+        toast.showToast();
       }}
     />
   );
