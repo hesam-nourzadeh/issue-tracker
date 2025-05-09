@@ -5,6 +5,7 @@ import StatusBadge from "../StatusBadge";
 import Link from "next/link";
 
 function Body({ issues }: { issues: Issue[] }) {
+  if (!issues || issues.length === 0) return null;
   return (
     <Table.Body>
       {issues.map((value, index) => (

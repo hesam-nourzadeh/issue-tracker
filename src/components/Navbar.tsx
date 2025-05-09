@@ -35,6 +35,18 @@ function Navbar() {
         >
           Issues
         </Link>
+        {status === "authenticated" && (
+          <Link
+            className={`${
+              currentPath === "/issues/my-issues"
+                ? "text-zinc-800"
+                : "text-zinc-500"
+            } nav-link`}
+            href="/issues/my-issues"
+          >
+            My Issues
+          </Link>
+        )}
       </Box>
       <Box>
         {status === "loading" && (

@@ -3,7 +3,6 @@ import prisma from "../../../../prisma/client";
 import { notFound } from "next/navigation";
 import { Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import StatusBadge from "@/components/StatusBadge";
-import ReactMarkdown from "react-markdown";
 import { BiEdit } from "react-icons/bi";
 import Link from "next/link";
 import IssueAlertDialog from "./IssueAlertDialog";
@@ -11,6 +10,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import UserSelectBinder from "./UserSelectBinder";
 import StatusSelect from "@/components/Selects/StatusSelect";
+import MarkDown from "@/components/MarkDown";
 
 type Props = {
   params: { id: string };
@@ -41,7 +41,7 @@ async function IssueDetailsPage({ params }: Props) {
           <Text>{issue.createdAt.toUTCString()}</Text>
         </Flex>
         <Card className="prose w-3/5">
-          <ReactMarkdown>{issue.description}</ReactMarkdown>
+          <MarkDown text={issue.description} />
         </Card>
       </Box>
       <Flex className="sm:mx-16 my-10 sm:my-0 flex-col md:flex-row w-8/12 mx-auto md:space-x-6 space-y-6 md:space-y-0">

@@ -2,6 +2,8 @@ import React from "react";
 import prisma from "../../../../prisma/client";
 import { Status } from "@prisma/client";
 import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+
 import IssueList, {
   columns,
   issuesListPageSize,
@@ -12,7 +14,8 @@ type Prop = {
   searchParams: SearchParams;
 };
 
-async function IssuesListPage({ searchParams }: Prop) {
+async function MyIssuesPage({ searchParams }: Prop) {
+  const session = await getServerSession();
   const statuses = Object.values(Status);
   const isValidStatus = statuses.includes(searchParams.status!);
   const orderBy = columns
@@ -24,6 +27,7 @@ async function IssuesListPage({ searchParams }: Prop) {
   const currentPage = parseInt(searchParams.page!) || 1;
   const whereClause = {
     status: isValidStatus ? searchParams.status : undefined,
+    assignedToUser: { email: session?.user?.email },
   };
 
   // Issues should not be fetched directly. I should fix this
@@ -41,15 +45,15 @@ async function IssuesListPage({ searchParams }: Prop) {
     <IssueList
       issues={issues}
       searchParams={searchParams}
+      key={2}
       issuesCount={issuesCount}
-      key={1}
     />
   );
 }
 export const metadata: Metadata = {
-  title: "Issues List",
+  title: "My Issues",
 };
 
 export const dynamic = "force-dynamic";
 
-export default IssuesListPage;
+export default MyIssuesPage;

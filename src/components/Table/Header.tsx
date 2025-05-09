@@ -1,8 +1,8 @@
-import { Column, SearchParams } from "@/app/issues/list/page";
 import { Table } from "@radix-ui/themes";
 import Link from "next/link";
 import React from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { Column, SearchParams } from "../IssueList";
 
 function TableHeader({
   searchParams,

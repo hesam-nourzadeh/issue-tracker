@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex, Text } from "@radix-ui/themes";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   BiChevronLeft,
   BiChevronRight,
@@ -8,7 +8,8 @@ import {
   BiChevronsRight,
 } from "react-icons/bi";
 import PaginationButton from "./PaginationButton";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { SearchParams } from "../IssueList";
 
 type Props = {
   itemCount: number;
@@ -19,18 +20,32 @@ type Props = {
 function Pagination({ itemCount, pageSize, currentPage = 1 }: Props) {
   const pageCount = Math.ceil(itemCount / pageSize);
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const newSearchParams = new URLSearchParams(searchParams);
+  const newSearchParams = useMemo(
+    () => new URLSearchParams(searchParams as SearchParams),
+    [searchParams]
+  );
+
+  useEffect(() => {
+    if (itemCount === 0) return; // No need to redirect if there are no items
+    if (currentPage > pageCount || currentPage < 1 || isNaN(currentPage)) {
+      newSearchParams.set("page", "1");
+      const query = "?" + newSearchParams;
+      router.push(pathname + query, { scroll: false });
+    }
+  }, [currentPage, pageCount, itemCount, pathname, router, newSearchParams]);
 
   const onClick = (page: number) => {
     newSearchParams.set("page", page.toString());
     const query = "?" + newSearchParams;
-    router.push("/issues/list" + query);
+    router.push(pathname + query);
   };
 
   if (currentPage > pageCount || currentPage < 1 || isNaN(currentPage)) {
     newSearchParams.set("page", "1");
-    redirect("/issues/list?" + newSearchParams);
+    const query = "?" + newSearchParams;
+    router.push(pathname + query);
   }
 
   if (itemCount <= pageSize) return null;
