@@ -8,6 +8,7 @@ import Pagination from "@/components/Pagination";
 import { default as TableHeader } from "@/components/Table/Header";
 import { default as TableBody } from "@/components/Table/Body";
 import { Metadata } from "next";
+import { getServerSession } from "next-auth";
 
 export type SearchParams = {
   status?: Status;
@@ -28,6 +29,8 @@ const columns: Column[] = [
 ];
 
 async function IssueListPage({ searchParams }: Prop) {
+  const user = await getServerSession();
+  console.log(user?.user?.email);
   const statuses = Object.values(Status);
   const isValidStatus = statuses.includes(searchParams.status!);
   const orderBy = columns
