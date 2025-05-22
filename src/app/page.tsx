@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import {
   Avatar,
   Card,
@@ -63,4 +66,3 @@ export default async function Home() {
 export const metadata: Metadata = {
   title: "Issue Tracker | Home Page",
 };
-export const dynamic = "force-dynamic";

@@ -19,7 +19,9 @@ function UserSelectBinder({ issue }: { issue: Issue }) {
           Toast.showToast("An unexpected error occured", "error");
           return err;
         }),
-    staleTime: 60 * 1000,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: "always",
     retry: 5,
   });
 

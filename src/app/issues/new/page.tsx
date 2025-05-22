@@ -1,8 +1,11 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import IssueFormSkeleton from "@/components/Placeholder/IssueFormSkeleton";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
-const IssueForm = dynamic(() => import("@/components/IssueForm"), {
+const IssueForm = nextDynamic(() => import("@/components/IssueForm"), {
   ssr: false,
   loading: () => <IssueFormSkeleton />,
 });

@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import React from "react";
 import prisma from "../../../../prisma/client";
 import { Status } from "@prisma/client";
@@ -49,7 +52,5 @@ async function IssuesListPage({ searchParams }: Prop) {
 export const metadata: Metadata = {
   title: "Issues List",
 };
-
-export const dynamic = "force-dynamic";
 
 export default IssuesListPage;

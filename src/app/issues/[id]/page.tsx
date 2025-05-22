@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import React, { cache } from "react";
 import prisma from "../../../../prisma/client";
 import { notFound } from "next/navigation";
