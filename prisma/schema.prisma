@@ -60,6 +60,7 @@ model User {
   accounts       Account[]
   sessions       Session[]
   assignedIssues Issue[]
+  isAdmin        Boolean   @default(false)
 }
 
 model VerificationToken {

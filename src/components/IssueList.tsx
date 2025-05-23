@@ -35,7 +35,7 @@ function IssueList({ searchParams, issues, issuesCount }: Props) {
   const pageSize = 10;
   return (
     <div className="m-8">
-      <Flex className="flex-col space-y-4 sm:space-y-0 items-stretch sm:flex-row sm:justify-between lg:w-3/12">
+      <Flex className="flex-col space-y-4 sm:space-y-0 items-stretch sm:flex-row sm:justify-between lg:w-3/12 sm:space-x-5">
         <IssueFilterSelect />
         <NextLink href={"/issues/new"} className="mx-auto sm:mx-0">
           <Button style={{ cursor: "pointer" }}>New Issue</Button>

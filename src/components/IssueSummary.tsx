@@ -29,7 +29,7 @@ function IssueSummary({ open, inProgress, closed }: Props) {
               classname="cursor-pointer bg-inherit font-semibold"
               status={status}
             />
-            <Text size={"5"} className="block mx-auto font-bold">
+            <Text size={"5"} className="block mx-auto font-bold text-center">
               {count}
             </Text>
           </Card>
