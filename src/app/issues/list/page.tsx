@@ -29,7 +29,6 @@ async function IssuesListPage({ searchParams }: Prop) {
     status: isValidStatus ? searchParams.status : undefined,
   };
 
-  // Issues should not be fetched directly. I should fix this
   const issues = await prisma.issue.findMany({
     where: whereClause,
     orderBy,

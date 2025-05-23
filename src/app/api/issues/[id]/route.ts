@@ -7,17 +7,43 @@ import { authOptions } from "../../auth/[...nextauth]/authOptions";
 
 type Params = { params: { id: string } };
 
+export async function GET(nextRequest: NextRequest, { params }: Params) {
+  const session = await getServerSession(authOptions);
+  const userEmail = session?.user?.email;
+  if (!userEmail)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+  let id: number;
+
+  try {
+    id = parseInt(params.id);
+  } catch (error) {
+    return NextResponse.json({ message: "Bad input", status: 400 });
+  }
+  const issue = await prisma.issue.findUnique({ where: { id } });
+
+  return NextResponse.json({
+    data: issue,
+    message: "Issue fethced successfully",
+  });
+}
+
 export async function PATCH(nextRequest: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
-
-  if (!session)
+  const userEmail = session?.user?.email;
+  if (!userEmail)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const body: Partial<Issue> = await nextRequest.json().catch((err) => {
     NextResponse.json(
       { message: "There was a problem with the body of the request." },
-      { status: 403 }
+      { status: 400 }
     );
+  });
+
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    include: { assignedIssues: true },
   });
 
   const validation = OptionalIssueSchema.safeParse(body);
@@ -34,6 +60,14 @@ export async function PATCH(nextRequest: NextRequest, { params }: Params) {
       { message: "Validation Failed", error: validation.error.format() },
       { status: 403 }
     );
+
+  const isAuthorized =
+    user?.isAdmin || user?.assignedIssues.find((issue) => issue.id === id)
+      ? true
+      : false;
+
+  if (!isAuthorized)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const issue = await prisma.issue
     .findUnique({
@@ -58,7 +92,7 @@ export async function PATCH(nextRequest: NextRequest, { params }: Params) {
       data: {
         title: body.title,
         description: body.description,
-        assignedToUserId: body.assignedToUserId,
+        assignedToUserId: user?.isAdmin ? body.assignedToUserId : user?.id,
         status: body.status,
       },
     })
@@ -77,8 +111,16 @@ export async function PATCH(nextRequest: NextRequest, { params }: Params) {
 
 export async function DELETE(nextRequest: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
+  const userEmail = session?.user?.email;
+  if (!userEmail)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  if (!session)
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    include: { assignedIssues: true },
+  });
+
+  if (!user?.isAdmin)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const id = parseInt(params.id);
@@ -88,6 +130,14 @@ export async function DELETE(nextRequest: NextRequest, { params }: Params) {
       { message: "The provided ID is not valid" },
       { status: 400 }
     );
+
+  const isAuthorized =
+    user?.isAdmin || user?.assignedIssues.find((issue) => issue.id === id)
+      ? true
+      : false;
+
+  if (!isAuthorized)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const issue = await prisma.issue
     .findUnique({ where: { id } })

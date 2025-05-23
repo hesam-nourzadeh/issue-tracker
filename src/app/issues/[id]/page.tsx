@@ -27,6 +27,9 @@ const getIssue = cache((id: number) =>
 
 async function IssueDetailsPage({ params }: Props) {
   const session = await getServerSession(authOptions);
+  const userEmail = session?.user?.email;
+  const user = await prisma.user.findUnique({ where: { email: userEmail! } });
+
   const id = parseInt(params.id);
 
   if (!id) notFound();
@@ -35,6 +38,7 @@ async function IssueDetailsPage({ params }: Props) {
 
   if (!issue) return notFound();
 
+  const isAutorized = user?.isAdmin || issue.assignedToUserId === user?.id;
   return (
     <Flex className="m-10 flex-col sm:flex-row">
       <Box>
@@ -49,15 +53,15 @@ async function IssueDetailsPage({ params }: Props) {
       </Box>
       <Flex className="sm:mx-16 my-10 sm:my-0 flex-col md:flex-row w-8/12 mx-auto md:space-x-6 space-y-6 md:space-y-0">
         {/* Put two different session validations because maybe later we define different access for different users */}
-        {session && (
+        {session && isAutorized && (
           <Button style={{ cursor: "pointer" }}>
             <BiEdit />
             <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
           </Button>
         )}
-        {session && <IssueAlertDialog issueId={id} />}
-        {session && <StatusSelect issue={issue} />}
-        {session && <UserSelectBinder issue={issue} />}
+        {session && isAutorized && <IssueAlertDialog issueId={id} />}
+        {session && isAutorized && <StatusSelect issue={issue} />}
+        {session && user?.isAdmin && <UserSelectBinder issue={issue} />}
       </Flex>
     </Flex>
   );

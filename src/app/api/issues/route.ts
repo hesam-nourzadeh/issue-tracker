@@ -8,13 +8,7 @@ import { authOptions } from "../auth/[...nextauth]/authOptions";
 export async function GET(nextRequest: NextRequest) {
   const session = await getServerSession(authOptions);
   const userEmail = session?.user?.email;
-
-  if (!session)
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-
-  const user = await prisma.user.findUnique({ where: { email: userEmail! } });
-
-  if (!user?.isAdmin)
+  if (!userEmail)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const issues = await prisma.issue.findMany();
@@ -22,17 +16,24 @@ export async function GET(nextRequest: NextRequest) {
   return NextResponse.json({
     data: issues,
     message: "Issues fethced successfully",
+    status: 200,
   });
 }
 
 export async function POST(nextRequest: NextRequest) {
   const session = await getServerSession(authOptions);
+  const userEmail = session?.user?.email;
 
-  if (!session)
+  if (!userEmail)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const body: Issue = await nextRequest.json();
   const validation = IssueSchema.safeParse(body);
+
+  const user = await prisma.user.findUnique({ where: { email: userEmail } });
+
+  if (!user?.isAdmin)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   if (!validation.success)
     return NextResponse.json(

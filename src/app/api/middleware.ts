@@ -7,7 +7,7 @@ import prisma from "../../../prisma/client";
 const getUsersPath = "/api/users";
 const adminPaths = ["/api/issues/", getUsersPath];
 const GET_METHOD = "GET";
-const POST_METHOD = "POST"
+const POST_METHOD = "POST";
 
 async function authMiddleware(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -23,7 +23,7 @@ async function adminOrSelfMiddleware(
   params: { id: string }
 ) {
   let id: number;
-
+  console.log("admin mddleware");
   try {
     id = parseInt(params.id);
   } catch (error) {
@@ -32,7 +32,10 @@ async function adminOrSelfMiddleware(
 
   const { pathname } = request.nextUrl;
 
-  if ((request.method === GET_METHOD || request.method === POST_METHOD) && pathname !== getUsersPath)
+  if (
+    (request.method === GET_METHOD || request.method === POST_METHOD) &&
+    pathname !== getUsersPath
+  )
     return NextResponse.next();
 
   const session = await getServerSession(authOptions);
@@ -69,5 +72,5 @@ export async function middleware(request: NextRequest, { params }: Params) {
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/api"],
 };
