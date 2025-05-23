@@ -32,7 +32,7 @@ export async function POST(nextRequest: NextRequest) {
 
   const user = await prisma.user.findUnique({ where: { email: userEmail } });
 
-  if (!user?.isAdmin)
+  if (!user)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   if (!validation.success)
@@ -41,9 +41,14 @@ export async function POST(nextRequest: NextRequest) {
       { status: 403 }
     );
 
+  console.log(user.id);
   const newIssue = await prisma.issue
     .create({
-      data: { title: body.title, description: body.description },
+      data: {
+        title: body.title,
+        description: body.description,
+        assignedToUser: { connect: { id: user.id } },
+      },
     })
     .catch((error) => {
       NextResponse.json(
