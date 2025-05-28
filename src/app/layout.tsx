@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import AuthProvider from "@/components/AuthProvider";
 import QueryClientProvider from "@/services/QueryClientProvider";
+import { getServerSession } from "next-auth";
+import prisma from "../../prisma/client";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -19,11 +21,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
+  const user = session
+    ? await prisma.user.findUnique({
+        where: { email: session?.user?.email! },
+      })
+    : undefined;
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -41,7 +50,7 @@ export default function RootLayout({
         <Theme>
           <AuthProvider>
             <QueryClientProvider>
-              <Navbar />
+              <Navbar isAdmin={user ? user.isAdmin : false} />
               {children}
             </QueryClientProvider>
           </AuthProvider>

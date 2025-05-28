@@ -8,7 +8,7 @@ import { AiFillBug } from "react-icons/ai";
 import Spinner from "./Placeholder/Spinner";
 import ProfileDropDown from "./ProfileDropDown";
 
-function Navbar() {
+function Navbar({ isAdmin = false }: { isAdmin: boolean }) {
   const currentPath = usePathname();
   const { status, data } = useSession();
 
@@ -45,6 +45,18 @@ function Navbar() {
             href="/issues/my-issues"
           >
             My Issues
+          </Link>
+        )}
+        {status === "authenticated" && isAdmin && (
+          <Link
+            className={`${
+              currentPath === "/issues/my-issues"
+                ? "text-zinc-800"
+                : "text-zinc-500"
+            } nav-link`}
+            href="/user-management"
+          >
+            User Management
           </Link>
         )}
       </Box>

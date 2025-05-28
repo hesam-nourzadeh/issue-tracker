@@ -9,7 +9,7 @@ function Body({ issues }: { issues: Issue[] }) {
   return (
     <Table.Body>
       {issues.map((value, index) => (
-        <Table.Row key={index}>
+        <Table.Row key={index} className="hover:bg-blue-50">
           <Table.Cell>
             <Link href={`/issues/${value.id}`}>{value.title}</Link>
           </Table.Cell>

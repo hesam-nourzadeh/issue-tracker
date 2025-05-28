@@ -8,9 +8,6 @@ function IssueListSkeleton({ issues }: { issues: number[] }) {
   return (
     <div className="m-8">
       <LoadingTheme>
-        <Link href={"/create-issue"}>
-          <Button style={{ cursor: "pointer" }}>New Issue</Button>
-        </Link>
         <Table.Root my={"5"} size={"3"} variant="surface">
           <Table.Header>
             <Table.Row>

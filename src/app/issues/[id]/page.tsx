@@ -8,12 +8,13 @@ import { Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import StatusBadge from "@/components/StatusBadge";
 import { BiEdit } from "react-icons/bi";
 import Link from "next/link";
-import IssueAlertDialog from "./IssueAlertDialog";
+import IssueAlertDialog from "../../../components/IssueAlertDialog";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import UserSelectBinder from "./UserSelectBinder";
 import StatusSelect from "@/components/Selects/StatusSelect";
 import MarkDown from "@/components/MarkDown";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 type Props = {
   params: { id: string };
@@ -43,11 +44,11 @@ async function IssueDetailsPage({ params }: Props) {
 
   if (!issue) return notFound();
 
-  const isAuthorized = user?.assignedIssues.find(
-    (userIssue) => userIssue.id === issue.id
-  )
-    ? true
-    : false;
+  const isAuthorized =
+    user?.assignedIssues.find((userIssue) => userIssue.id === issue.id) ||
+    user?.isAdmin
+      ? true
+      : false;
 
   return (
     <Flex className="m-10 flex-col sm:flex-row">
@@ -62,14 +63,23 @@ async function IssueDetailsPage({ params }: Props) {
         </Card>
       </Box>
       <Flex className="sm:mx-16 my-10 sm:my-0 flex-col md:flex-row w-8/12 mx-auto md:space-x-6 space-y-6 md:space-y-0">
-        {/* Put two different session validations because maybe later we define different access for different users */}
         {session && isAuthorized && (
           <Button style={{ cursor: "pointer" }}>
             <BiEdit />
             <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
           </Button>
         )}
-        {session && isAuthorized && <IssueAlertDialog issueId={id} />}
+        {session && isAuthorized && (
+          <IssueAlertDialog
+            trigger={
+              <Button style={{ cursor: "pointer" }} color="red">
+                <AiFillCloseCircle />
+                Delete Issue
+              </Button>
+            }
+            issueId={id}
+          />
+        )}
         {session && isAuthorized && <StatusSelect issue={issue} />}
         {session && user?.isAdmin && <UserSelectBinder issue={issue} />}
       </Flex>

@@ -46,7 +46,7 @@ function IssueList({ searchParams, issues, issuesCount }: Props) {
         {issues && issues.length > 0 ? (
           <TableBody issues={issues} />
         ) : (
-          <Table.Row>
+          <Table.Row className="hover:bg-blue-50">
             <Table.Cell className="p-0" colSpan={3}>
               <Alert
                 text="No issues found."

@@ -4,21 +4,20 @@ import { ApiClient } from "@/services/ApiClient";
 import Toast from "@/services/Toast";
 import { Button } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
-import React from "react";
-import { AiFillCloseCircle } from "react-icons/ai";
+import React, { ReactElement } from "react";
 
-function IssueAlertDialog({ issueId }: { issueId: number }) {
+type Props = {
+  trigger: ReactElement;
+  issueId: number;
+};
+
+function IssueAlertDialog({ trigger, issueId }: Props) {
   const apiClient = new ApiClient(`/api/issues/${issueId}`);
   const router = useRouter();
 
   return (
     <AlertDialog
-      trigger={
-        <Button style={{ cursor: "pointer" }} color="red">
-          <AiFillCloseCircle />
-          Delete Issue
-        </Button>
-      }
+      trigger={trigger}
       title="Issue Deletion"
       description="Are you sure you want to delete this issue ?"
       actionButton={
