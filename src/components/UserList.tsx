@@ -1,5 +1,4 @@
 import {
-  Flex,
   Link,
   Table,
   TableBody,
@@ -8,12 +7,8 @@ import {
   TableRow,
 } from "@radix-ui/themes";
 import React from "react";
-import IssueFilterSelect from "./Selects/IssueFilterSelect";
 import Alert from "./Alert";
-import Pagination from "./Pagination";
 import { User } from "@prisma/client";
-import prisma from "../../prisma/client";
-import UsersAlertDialog from "./UsersAlertDialog";
 
 type Props = { users: User[] };
 
@@ -30,7 +25,7 @@ function UserList({ users }: Props) {
               <Link>Email</Link>
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>
-              <Link>Is Admin</Link>
+              <Link>Role</Link>
             </Table.ColumnHeaderCell>
           </Table.Row>
         </TableHeader>

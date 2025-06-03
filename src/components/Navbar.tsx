@@ -50,7 +50,7 @@ function Navbar({ isAdmin = false }: { isAdmin: boolean }) {
         {status === "authenticated" && isAdmin && (
           <Link
             className={`${
-              currentPath === "/issues/my-issues"
+              currentPath === "/user-management"
                 ? "text-zinc-800"
                 : "text-zinc-500"
             } nav-link`}

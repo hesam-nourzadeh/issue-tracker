@@ -11,7 +11,7 @@ import {
   Text,
 } from "@radix-ui/themes";
 import prisma from "../../prisma/client";
-import StatusBadge from "@/components/StatusBadge";
+import StatusBadge from "@/components/IssueStatusBadge";
 import IssueSummary from "@/components/IssueSummary";
 import IssuesBarChart from "@/components/BarChart";
 import { Metadata } from "next";

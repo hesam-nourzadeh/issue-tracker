@@ -2,7 +2,7 @@ import { Status } from "@prisma/client";
 import { Card, Flex, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import React from "react";
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "./IssueStatusBadge";
 
 type Props = { open: number; inProgress: number; closed: number };
 

@@ -5,7 +5,7 @@ import React, { cache } from "react";
 import prisma from "../../../../prisma/client";
 import { notFound } from "next/navigation";
 import { Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
-import StatusBadge from "@/components/StatusBadge";
+import StatusBadge from "@/components/IssueStatusBadge";
 import { BiEdit } from "react-icons/bi";
 import Link from "next/link";
 import IssueAlertDialog from "../../../components/IssueAlertDialog";

@@ -11,7 +11,7 @@ const badgeModes: Record<
   OPEN: { tag: "OPEN", color: "blue" },
 };
 
-function StatusBadge({
+function IssueStatusBadge({
   status,
   classname,
 }: {
@@ -27,4 +27,4 @@ function StatusBadge({
   );
 }
 
-export default StatusBadge;
+export default IssueStatusBadge;

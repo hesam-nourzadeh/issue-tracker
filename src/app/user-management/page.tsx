@@ -19,10 +19,7 @@ async function UserManagementPage() {
   return (
     <div className="m-8 space-y-7">
       <Heading size={"8"} color="cyan">
-        {"Welcome to user management "}
-      </Heading>
-      <Heading size={"4"} color="gold">
-        {"Tip: Click in order to change user role."}
+        {"User Management"}
       </Heading>
       <UserList users={users} />
     </div>
