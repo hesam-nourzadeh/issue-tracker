@@ -3,26 +3,46 @@ import UsersAlertDialog from "@/components/UsersAlertDialog";
 import Toast from "@/services/Toast";
 import { User } from "@prisma/client";
 import { Button, Flex } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { RiAdminLine } from "react-icons/ri";
+import { ApiClient } from "@/services/ApiClient";
+import { useRouter } from "next/navigation";
 
 function UserManagementActions({ userDetails }: { userDetails: User }) {
   const router = useRouter();
 
-  const promoteToAdmin = async () => {
-    console.log("change !!!!");
-    router.refresh();
-    Toast.showToast(
-      `Role has been successfully changed to ${
-        userDetails.isAdmin ? "normal user" : "admin"
-      }.`,
-      "success"
+  const promoteToAdmin = async (userDetails: User) => {
+    const apiClient = new ApiClient<Partial<User>>(
+      `/api/users/${userDetails.id}`
     );
+    let response;
+    try {
+      response = await apiClient.update({ isAdmin: !userDetails.isAdmin });
+      Toast.showToast(
+        `User role has been changed to ${response.data.isAdmin}`,
+        "success"
+      );
+      router.replace("/user-management");
+    } catch (error) {
+      Toast.showToast(`An unkown error occured`, "error");
+      router.replace("/user-management");
+    }
   };
 
-  const deleteUser = async () => {};
+  const deleteUser = async (userId: string) => {
+    const apiClient = new ApiClient<Partial<User>>(`/api/users/${userId}`);
+    let response;
+    try {
+      response = await apiClient.delete();
+      Toast.showToast(`User has been deleted successfully`, "success");
+      router.replace("/user-management");
+      console.log(response);
+    } catch (error) {
+      Toast.showToast(`An unkown error occured`, "error");
+      router.replace("/user-management");
+    }
+  };
 
   return (
     <Flex className="sm:mx-16 my-10 sm:my-0 flex-col md:flex-row w-8/12 mx-auto md:space-x-6 space-y-6 md:space-y-0">
@@ -34,7 +54,7 @@ function UserManagementActions({ userDetails }: { userDetails: User }) {
         actionBtnText="Change"
         btnColor="blue"
         key={0}
-        action={promoteToAdmin}
+        action={() => promoteToAdmin(userDetails)}
         trigger={
           <Button
             color={userDetails.isAdmin ? "yellow" : "green"}
@@ -47,7 +67,7 @@ function UserManagementActions({ userDetails }: { userDetails: User }) {
       />
       <UsersAlertDialog
         key={1}
-        action={deleteUser}
+        action={() => deleteUser(userDetails.id)}
         title="User Deletion"
         description={"Are you sure you want to delete this user"}
         actionBtnText="Delete"

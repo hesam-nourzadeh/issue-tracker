@@ -31,3 +31,6 @@ export const metadata: Metadata = {
 };
 
 export default UserManagementPage;
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;

@@ -65,3 +65,6 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default UserManagementDetailsPage;
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;

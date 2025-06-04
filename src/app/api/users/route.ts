@@ -5,14 +5,16 @@ import { authOptions } from "../auth/[...nextauth]/authOptions";
 
 export async function GET(nextRequest: NextRequest) {
   const session = await getServerSession(authOptions);
-  const userEmail = session?.user?.email;
+  const adminUserEmail = session?.user?.email;
 
-  if (!userEmail)
+  if (!adminUserEmail)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  const user = await prisma.user.findUnique({ where: { email: userEmail } });
+  const adminUser = await prisma.user.findUnique({
+    where: { email: adminUserEmail },
+  });
 
-  if (!user?.isAdmin)
+  if (!adminUser?.isAdmin)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const users = await prisma.user.findMany();
