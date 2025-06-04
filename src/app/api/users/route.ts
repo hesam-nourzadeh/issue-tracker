@@ -11,7 +11,7 @@ export async function GET(nextRequest: NextRequest) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const adminUser = await prisma.user.findUnique({
-    where: { email: adminUserEmail },
+    where: { email: adminUserEmail! },
   });
 
   if (!adminUser?.isAdmin)

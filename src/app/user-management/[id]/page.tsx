@@ -24,6 +24,8 @@ async function UserManagementDetailsPage({ params: { id } }: Props) {
 
   if (!userDetails) return notFound();
 
+  if (userDetails.id === adminUser.id) return notFound();
+
   return (
     <Flex className="m-10 flex-col sm:flex-row">
       <Box>

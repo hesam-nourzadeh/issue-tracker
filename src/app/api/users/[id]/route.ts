@@ -13,7 +13,7 @@ export async function DELETE(nextRequest: NextRequest, { params }: Params) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const adminUser = await prisma.user.findUnique({
-    where: { email: adminUserEmail },
+    where: { email: adminUserEmail! },
   });
 
   if (!adminUser?.isAdmin)
@@ -32,4 +32,33 @@ export async function DELETE(nextRequest: NextRequest, { params }: Params) {
     message: "User deleted and their issues became unassigned",
     deletedUser,
   });
+}
+
+export async function PATCH(nextRequest: NextRequest, { params }: Params) {
+  const session = await getServerSession(authOptions);
+  const adminUserEmail = session?.user?.email;
+
+  if (!adminUserEmail)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+  const adminUser = await prisma.user.findUnique({
+    where: { email: adminUserEmail! },
+  });
+
+  if (!adminUser?.isAdmin)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+  const id = params.id;
+
+  const user = await prisma.user.findUnique({ where: { id } });
+
+  if (!user)
+    return NextResponse.json({ message: "No user found", status: 404 });
+
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: { isAdmin: !user.isAdmin },
+  });
+
+  return NextResponse.json(updatedUser);
 }

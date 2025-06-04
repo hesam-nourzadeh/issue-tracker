@@ -45,7 +45,7 @@ async function adminOrSelfMiddleware(
 
   if (!user?.isAdmin) {
     const issue = await prisma.issue.findUnique({
-      where: { id, assignedToUser: { email: userEmail } },
+      where: { id, assignedToUser: { email: userEmail! } },
     });
 
     if (!issue)

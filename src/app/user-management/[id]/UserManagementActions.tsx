@@ -20,7 +20,9 @@ function UserManagementActions({ userDetails }: { userDetails: User }) {
     try {
       response = await apiClient.update({ isAdmin: !userDetails.isAdmin });
       Toast.showToast(
-        `User role has been changed to ${response.data.isAdmin}`,
+        `User role has been changed to ${
+          response.data.isAdmin ? "admin" : "user"
+        }`,
         "success"
       );
       router.replace("/user-management");

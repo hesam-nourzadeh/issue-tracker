@@ -42,7 +42,7 @@ export async function PATCH(nextRequest: NextRequest, { params }: Params) {
   });
 
   const user = await prisma.user.findUnique({
-    where: { email: userEmail },
+    where: { email: userEmail! },
     include: { assignedIssues: true },
   });
 
@@ -116,7 +116,7 @@ export async function DELETE(nextRequest: NextRequest, { params }: Params) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const user = await prisma.user.findUnique({
-    where: { email: userEmail },
+    where: { email: userEmail! },
     include: { assignedIssues: true },
   });
 

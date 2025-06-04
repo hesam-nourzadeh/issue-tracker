@@ -30,7 +30,7 @@ async function MyIssuesPage({ searchParams }: Prop) {
   const currentPage = parseInt(searchParams.page!) || 1;
   const whereClause = {
     status: isValidStatus ? searchParams.status : undefined,
-    assignedToUser: { email: session?.user?.email },
+    assignedToUser: { email: session?.user?.email! },
   };
 
   // Issues should not be fetched directly. I should fix this

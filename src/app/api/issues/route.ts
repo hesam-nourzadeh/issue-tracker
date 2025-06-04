@@ -30,7 +30,7 @@ export async function POST(nextRequest: NextRequest) {
   const body: Issue = await nextRequest.json();
   const validation = IssueSchema.safeParse(body);
 
-  const user = await prisma.user.findUnique({ where: { email: userEmail } });
+  const user = await prisma.user.findUnique({ where: { email: userEmail! } });
 
   if (!user)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

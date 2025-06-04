@@ -8,13 +8,15 @@ import { redirect } from "next/navigation";
 
 async function UserManagementPage() {
   const session = await getServerSession();
-  const user = await prisma.user.findUnique({
+  const adminUser = await prisma.user.findUnique({
     where: { email: session?.user?.email! },
   });
 
-  if (!user?.isAdmin) return redirect("/");
+  if (!adminUser?.isAdmin) return redirect("/");
 
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    where: { NOT: { id: adminUser.id } },
+  });
 
   return (
     <div className="m-8 space-y-7">

@@ -8,8 +8,12 @@ import { Card } from "@radix-ui/themes";
 
 async function UserManagementDetailsLoadingPage() {
   const session = await getServerSession();
+  if (!session) return redirect("/");
+
+  const userEmail = session?.user?.email;
+
   const user = await prisma.user.findUnique({
-    where: { email: session?.user?.email! },
+    where: { email: userEmail! },
   });
 
   if (!user?.isAdmin) return redirect("/");
