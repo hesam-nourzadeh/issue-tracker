@@ -18,33 +18,38 @@ type Props = {
 };
 
 async function EditPage({ params }: Props) {
-  const session = await getServerSession(authOptions);
+  try {
+    const session = await getServerSession(authOptions);
 
-  const issue = await prisma.issue
-    .findUnique({
-      where: { id: parseInt(params.id) },
-    })
-    .catch(() => {
-      return notFound();
+    const issue = await prisma.issue
+      .findUnique({
+        where: { id: parseInt(params.id) },
+      })
+      .catch(() => {
+        return notFound();
+      });
+
+    if (!issue) return notFound();
+
+    const userEmail = session?.user?.email;
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail! },
+      include: { assignedIssues: true },
     });
 
-  if (!issue) return notFound();
+    const isAuthorized = user?.assignedIssues.find(
+      (userIssue) => userIssue.id === issue.id
+    )
+      ? true
+      : false;
 
-  const userEmail = session?.user?.email;
-  const user = await prisma.user.findUnique({
-    where: { email: userEmail! },
-    include: { assignedIssues: true },
-  });
+    if (user?.isAdmin || isAuthorized) return <IssueForm issue={issue} />;
 
-  const isAuthorized = user?.assignedIssues.find(
-    (userIssue) => userIssue.id === issue.id
-  )
-    ? true
-    : false;
-
-  if (user?.isAdmin || isAuthorized) return <IssueForm issue={issue} />;
-
-  return redirect("/");
+    return redirect("/");
+  } catch (error) {
+    console.error(error);
+    return notFound();
+  }
 }
 
 export async function generateMetadata({ params }: Props) {

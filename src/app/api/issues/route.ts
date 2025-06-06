@@ -21,44 +21,48 @@ export async function GET(nextRequest: NextRequest) {
 }
 
 export async function POST(nextRequest: NextRequest) {
-  const session = await getServerSession(authOptions);
-  const userEmail = session?.user?.email;
+  try {
+    const session = await getServerSession(authOptions);
+    const userEmail = session?.user?.email;
 
-  if (!userEmail)
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!userEmail)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  const body: Issue = await nextRequest.json();
-  const validation = IssueSchema.safeParse(body);
+    const body: Issue = await nextRequest.json();
+    const validation = IssueSchema.safeParse(body);
 
-  const user = await prisma.user.findUnique({ where: { email: userEmail! } });
+    const user = await prisma.user.findUnique({ where: { email: userEmail! } });
 
-  if (!user)
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!user)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  if (!validation.success)
-    return NextResponse.json(
-      { message: "Validation Failed", error: validation.error.format() },
-      { status: 403 }
-    );
-
-  console.log(user.id);
-  const newIssue = await prisma.issue
-    .create({
-      data: {
-        title: body.title,
-        description: body.description,
-        assignedToUser: { connect: { id: user.id } },
-      },
-    })
-    .catch((error) => {
-      NextResponse.json(
-        { message: "Could not create the issue", error },
-        { status: 400 }
+    if (!validation.success)
+      return NextResponse.json(
+        { message: "Validation Failed", error: validation.error.format() },
+        { status: 403 }
       );
-    });
 
-  return NextResponse.json({
-    data: newIssue,
-    message: "Issue creation was successful",
-  });
+    console.log(user.id);
+    const newIssue = await prisma.issue
+      .create({
+        data: {
+          title: body.title,
+          description: body.description,
+          assignedToUser: { connect: { id: user.id } },
+        },
+      })
+      .catch((error) => {
+        NextResponse.json(
+          { message: "Could not create the issue", error },
+          { status: 400 }
+        );
+      });
+
+    return NextResponse.json({
+      data: newIssue,
+      message: "Issue creation was successful",
+    });
+  } catch (error) {
+    return NextResponse.error();
+  }
 }

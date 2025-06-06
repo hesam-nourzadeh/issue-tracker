@@ -10,43 +10,49 @@ import IssueList, {
   issuesListPageSize,
   SearchParams,
 } from "@/components/IssueList";
+import { notFound } from "next/navigation";
 
 type Prop = {
   searchParams: SearchParams;
 };
 
 async function IssuesListPage({ searchParams }: Prop) {
-  const statuses = Object.values(Status);
-  const isValidStatus = statuses.includes(searchParams.status!);
-  const orderBy = columns
-    .map((column) => column.value)
-    .includes(searchParams.sortBy!)
-    ? { [searchParams.sortBy as string]: "desc" }
-    : undefined;
+  try {
+    const statuses = Object.values(Status);
+    const isValidStatus = statuses.includes(searchParams.status!);
+    const orderBy = columns
+      .map((column) => column.value)
+      .includes(searchParams.sortBy!)
+      ? { [searchParams.sortBy as string]: "desc" }
+      : undefined;
 
-  const currentPage = parseInt(searchParams.page!) || 1;
-  const whereClause = {
-    status: isValidStatus ? searchParams.status : undefined,
-  };
+    const currentPage = parseInt(searchParams.page!) || 1;
+    const whereClause = {
+      status: isValidStatus ? searchParams.status : undefined,
+    };
 
-  const issues = await prisma.issue.findMany({
-    where: whereClause,
-    orderBy,
-    skip: (currentPage - 1) * issuesListPageSize,
-    take: issuesListPageSize,
-  });
-  const issuesCount = await prisma.issue.count({
-    where: whereClause,
-  });
+    const issues = await prisma.issue.findMany({
+      where: whereClause,
+      orderBy,
+      skip: (currentPage - 1) * issuesListPageSize,
+      take: issuesListPageSize,
+    });
+    const issuesCount = await prisma.issue.count({
+      where: whereClause,
+    });
 
-  return (
-    <IssueList
-      issues={issues}
-      searchParams={searchParams}
-      issuesCount={issuesCount}
-      key={1}
-    />
-  );
+    return (
+      <IssueList
+        issues={issues}
+        searchParams={searchParams}
+        issuesCount={issuesCount}
+        key={1}
+      />
+    );
+  } catch (error) {
+    console.error(error);
+    return notFound();
+  }
 }
 export const metadata: Metadata = {
   title: "Issues List",

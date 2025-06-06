@@ -4,18 +4,22 @@ import { getServerSession } from "next-auth";
 import prisma from "../../../../prisma/client";
 
 export async function GET(nextRequest: NextRequest) {
-  const session = await getServerSession(authOptions);
-  const userEmail = session?.user?.email;
+  try {
+    const session = await getServerSession(authOptions);
+    const userEmail = session?.user?.email;
 
-  if (!userEmail)
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!userEmail)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  const issues = await prisma.issue.findMany({
-    include: { assignedToUser: true },
-  });
+    const issues = await prisma.issue.findMany({
+      include: { assignedToUser: true },
+    });
 
-  return NextResponse.json({
-    data: issues,
-    message: "Issues fethced successfully",
-  });
+    return NextResponse.json({
+      data: issues,
+      message: "Issues fethced successfully",
+    });
+  } catch (error) {
+    return NextResponse.error();
+  }
 }

@@ -8,24 +8,28 @@ import { authOptions } from "../../auth/[...nextauth]/authOptions";
 type Params = { params: { id: string } };
 
 export async function GET(nextRequest: NextRequest, { params }: Params) {
-  const session = await getServerSession(authOptions);
-  const userEmail = session?.user?.email;
-  if (!userEmail)
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-
-  let id: number;
-
   try {
-    id = parseInt(params.id);
-  } catch (error) {
-    return NextResponse.json({ message: "Bad input", status: 400 });
-  }
-  const issue = await prisma.issue.findUnique({ where: { id } });
+    const session = await getServerSession(authOptions);
+    const userEmail = session?.user?.email;
+    if (!userEmail)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  return NextResponse.json({
-    data: issue,
-    message: "Issue fethced successfully",
-  });
+    let id: number;
+
+    try {
+      id = parseInt(params.id);
+    } catch (error) {
+      return NextResponse.json({ message: "Bad input", status: 400 });
+    }
+    const issue = await prisma.issue.findUnique({ where: { id } });
+
+    return NextResponse.json({
+      data: issue,
+      message: "Issue fethced successfully",
+    });
+  } catch (error) {
+    return NextResponse.error();
+  }
 }
 
 export async function PATCH(nextRequest: NextRequest, { params }: Params) {

@@ -1,33 +1,38 @@
 import { getServerSession } from "next-auth";
 import React from "react";
 import prisma from "../../../../prisma/client";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import LoadingTheme from "@/components/Placeholder/LoadingTheme";
 import Skeleton from "react-loading-skeleton";
 import { Card } from "@radix-ui/themes";
 
 async function UserManagementDetailsLoadingPage() {
-  const session = await getServerSession();
-  if (!session) return redirect("/");
+  try {
+    const session = await getServerSession();
+    if (!session) return redirect("/");
 
-  const userEmail = session?.user?.email;
+    const userEmail = session?.user?.email;
 
-  const user = await prisma.user.findUnique({
-    where: { email: userEmail! },
-  });
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail! },
+    });
 
-  if (!user?.isAdmin) return redirect("/");
+    if (!user?.isAdmin) return redirect("/");
 
-  return (
-    <div className="m-10 w-4/12">
-      <LoadingTheme>
-        <Skeleton count={4} />
-        <Card className="w-3/5">
-          <Skeleton count={3} />
-        </Card>
-      </LoadingTheme>
-    </div>
-  );
+    return (
+      <div className="m-10 w-4/12">
+        <LoadingTheme>
+          <Skeleton count={4} />
+          <Card className="w-3/5">
+            <Skeleton count={3} />
+          </Card>
+        </LoadingTheme>
+      </div>
+    );
+  } catch (error) {
+    console.error(error);
+    return notFound();
+  }
 }
 
 export default UserManagementDetailsLoadingPage;

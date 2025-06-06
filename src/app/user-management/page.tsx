@@ -4,28 +4,33 @@ import prisma from "../../../prisma/client";
 import { Heading } from "@radix-ui/themes";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 async function UserManagementPage() {
-  const session = await getServerSession();
-  const adminUser = await prisma.user.findUnique({
-    where: { email: session?.user?.email! },
-  });
+  try {
+    const session = await getServerSession();
+    const adminUser = await prisma.user.findUnique({
+      where: { email: session?.user?.email! },
+    });
 
-  if (!adminUser?.isAdmin) return redirect("/");
+    if (!adminUser?.isAdmin) return redirect("/");
 
-  const users = await prisma.user.findMany({
-    where: { NOT: { id: adminUser.id } },
-  });
+    const users = await prisma.user.findMany({
+      where: { NOT: { id: adminUser.id } },
+    });
 
-  return (
-    <div className="m-8 space-y-7">
-      <Heading size={"8"} color="cyan">
-        {"User Management"}
-      </Heading>
-      <UserList users={users} />
-    </div>
-  );
+    return (
+      <div className="m-8 space-y-7">
+        <Heading size={"8"} color="cyan">
+          {"User Management"}
+        </Heading>
+        <UserList users={users} />
+      </div>
+    );
+  } catch (error) {
+    console.error(error);
+    return notFound();
+  }
 }
 
 export const metadata: Metadata = {

@@ -15,6 +15,18 @@ function IssueAlertDialog({ trigger, issueId }: Props) {
   const apiClient = new ApiClient(`/api/issues/${issueId}`);
   const router = useRouter();
 
+  const action = async () => {
+    try {
+      await apiClient.delete();
+      router.replace("/issues/list");
+      router.refresh();
+      Toast.showToast("Issue has been successfully deleted.", "success");
+    } catch (error) {
+      Toast.showToast(`An unknown error occured`, "error");
+      console.error(error);
+    }
+  };
+
   return (
     <AlertDialog
       trigger={trigger}
@@ -25,12 +37,7 @@ function IssueAlertDialog({ trigger, issueId }: Props) {
           Delete
         </Button>
       }
-      action={async () => {
-        await apiClient.delete();
-        router.replace("/issues/list");
-        router.refresh();
-        Toast.showToast("Issue has been successfully deleted.", "success");
-      }}
+      action={action}
     />
   );
 }

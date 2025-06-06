@@ -13,49 +13,56 @@ type Props = {
 };
 
 async function UserManagementDetailsPage({ params: { id } }: Props) {
-  const session = await getServerSession();
-  const adminUser = await prisma.user.findUnique({
-    where: { email: session?.user?.email! },
-  });
+  try {
+    const session = await getServerSession();
+    const adminUser = await prisma.user.findUnique({
+      where: { email: session?.user?.email! },
+    });
 
-  const userDetails = await prisma.user.findUnique({ where: { id } });
+    const userDetails = await prisma.user.findUnique({ where: { id } });
 
-  if (!adminUser?.isAdmin) return redirect("/");
+    if (!adminUser?.isAdmin) return redirect("/");
 
-  if (!userDetails) return notFound();
+    if (!userDetails) return notFound();
 
-  if (userDetails.id === adminUser.id) return notFound();
+    if (userDetails.id === adminUser.id) return notFound();
 
-  return (
-    <Flex className="m-10 flex-col sm:flex-row">
-      <Box>
-        <Flex className="flex-row items-center space-x-4">
-          <Image
-            className="rounded-full"
-            width={50}
-            height={50}
-            alt={userDetails.name!}
-            src={userDetails.image!}
-          />
-          <Heading>{userDetails.name}</Heading>
-        </Flex>
-        <Flex className="space-x-3" my={"5"}>
-          <UserStatusBadge
-            classname="text-base"
-            userRole={userDetails.isAdmin ? "ADMIN" : "USER"}
-          />
-          <Text>
-            {"User ID: "}
-            {userDetails.id}
-          </Text>
-        </Flex>
-        <Card className="prose w-full px-3">
-          <MarkDown text={`User Email: ${userDetails.email}`} />
-        </Card>
-      </Box>
-      <UserManagementActions userDetails={userDetails} />
-    </Flex>
-  );
+    return (
+      <Flex className="m-10 flex-col sm:flex-row">
+        <Box>
+          <Flex className="flex-row items-center space-x-4">
+            {userDetails.image && (
+              <Image
+                className="rounded-full"
+                width={50}
+                height={50}
+                alt={userDetails.name!}
+                src={userDetails.image}
+              />
+            )}
+            <Heading>{userDetails.name}</Heading>
+          </Flex>
+          <Flex className="space-x-3" my={"5"}>
+            <UserStatusBadge
+              classname="text-base"
+              userRole={userDetails.isAdmin ? "ADMIN" : "USER"}
+            />
+            <Text>
+              {"User ID: "}
+              {userDetails.id}
+            </Text>
+          </Flex>
+          <Card className="prose w-full px-3">
+            <MarkDown text={`User Email: ${userDetails.email}`} />
+          </Card>
+        </Box>
+        <UserManagementActions userDetails={userDetails} />
+      </Flex>
+    );
+  } catch (error) {
+    console.error(error);
+    return notFound();
+  }
 }
 
 export async function generateMetadata({ params }: Props) {

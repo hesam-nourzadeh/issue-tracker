@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth/[...nextauth]/authOptions";
 import prisma from "../../../prisma/client";
+import { notFound } from "next/navigation";
+import Toast from "@/services/Toast";
 
 const getUsersPath = "/api/users";
 const adminPaths = ["/api/issues/", getUsersPath];
@@ -22,37 +24,43 @@ async function adminOrSelfMiddleware(
   request: NextRequest,
   params: { id: string }
 ) {
-  let id: number;
-  console.log("admin mddleware");
   try {
-    id = parseInt(params.id);
-  } catch (error) {
-    return NextResponse.json({ message: "Bad input" }, { status: 400 });
-  }
+    let id: number;
+    console.log("admin mddleware");
+    try {
+      id = parseInt(params.id);
+    } catch (error) {
+      return NextResponse.json({ message: "Bad input" }, { status: 400 });
+    }
 
-  const { pathname } = request.nextUrl;
+    const { pathname } = request.nextUrl;
 
-  if (
-    (request.method === GET_METHOD || request.method === POST_METHOD) &&
-    pathname !== getUsersPath
-  )
+    if (
+      (request.method === GET_METHOD || request.method === POST_METHOD) &&
+      pathname !== getUsersPath
+    )
+      return NextResponse.next();
+
+    const session = await getServerSession(authOptions);
+    const userEmail = session?.user?.email;
+
+    const user = await prisma.user.findUnique({ where: { email: userEmail! } });
+
+    if (!user?.isAdmin) {
+      const issue = await prisma.issue.findUnique({
+        where: { id, assignedToUser: { email: userEmail! } },
+      });
+
+      if (!issue)
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     return NextResponse.next();
-
-  const session = await getServerSession(authOptions);
-  const userEmail = session?.user?.email;
-
-  const user = await prisma.user.findUnique({ where: { email: userEmail! } });
-
-  if (!user?.isAdmin) {
-    const issue = await prisma.issue.findUnique({
-      where: { id, assignedToUser: { email: userEmail! } },
-    });
-
-    if (!issue)
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  } catch (error) {
+    Toast.showToast(`Network Error`, "error");
+    console.error(error);
+    return notFound();
   }
-
-  return NextResponse.next();
 }
 
 type Params = { params: { id: string } };
